@@ -1,7 +1,7 @@
 {
-  "name": "One rule ruleset",
-  "description": "Single rule ruleset for proof-of-concept testing purposes.",
+  "name": "",
+  "description": "",
   "rules": [
-      "test-1000"
+      ""
     ]
 }
