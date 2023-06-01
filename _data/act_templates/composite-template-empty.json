@@ -1,0 +1,45 @@
+{
+  "id": "",
+  "name": "",
+  "rule_type": "composite",
+  "description": "This rule checks ...",
+  "accessibility_requirements": {
+    "wcag20:x.x.x": {
+      "forConformance": true,
+      "failed": "not satisfied",
+      "passed": "satisfied | further testing needed",
+      "inapplicable": "satisfied | further testing needed"
+    },
+    "aria12:anchor-name": {
+      "title": "Title to display",
+      "forConformance": true,
+      "failed": "not satisfied",
+      "passed": "satisfied | further testing needed",
+      "inapplicable": "satisfied | further testing needed"
+    },
+    "wcag-technique:Xxx": {
+      "forConformance": false,
+      "failed": "not satisfied",
+      "passed": "satisfied | further testing needed",
+      "inapplicable": "satisfied | further testing needed"
+    },
+    "using-aria:anchor-name": {
+      "title": "Title to display",
+      "forConformance": false,
+      "failed": "not satisfied",
+      "passed": "satisfied | further testing needed",
+      "inapplicable": "satisfied | further testing needed"
+    }
+  },
+  "input_rules": [
+    ""
+  ],
+  "acknowledgments": {
+    "authors": [
+      ""
+    ],
+    "previous_authors": [
+      ""
+    ]
+  }
+}
