@@ -1,6 +1,19 @@
 ---
 permalink: audit.html
 ---
+<!-- 
+	Data needed:
+	(New Audit)
+	- URL parameter data for Name/Audit Type (checklist ID)
+
+	(Continue Audit)
+	- rules/checklists/steps/guides/pages/pagestates/flows/issues/scope filtered by audit
+
+	(Both States)
+	- list rules/checklists/guides
+	- add pages/pagestates/flows
+-->
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -14,14 +27,19 @@ permalink: audit.html
 			<main>
                 <!-- renamed if in GET data -->
 				<h1>Unnamed Minimal Audit</h1>
-
+				<h2>Actions</h2><!-- Things like "Load" "Export" "Help" -->
                 <!-- maybe should set up a sample audit in IndexedDB if one doesn't exist yet -->
-				<h2>Pages</h2>
-                <h3>Checks</h3>
+				<h2>Scope</h2>
+				<h3>Pages</h3>
+				<h4><button>Page 1</button></h4><!-- Accordion Expand Section control -->
+				<ul><!-- List of Page States for Page 1 -->
+					<li><button>Initial</button></li>
+				</ul>
+                <h2>Checks</h2>
                     <table> <!-- look into making editable/toggling to editable view -->
                         <tr>
-                            <th>Name</th>
-                            <th>Description</th>
+                            <th>Issue Details</th>
+                            <th>Check/Rule Description</th>
                         </tr>
                     </table>
 			</main>

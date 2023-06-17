@@ -12,11 +12,7 @@ rules: 'id,rule_name,*accessibility_requirements'
 db.audits.bulkPut([
 	{ id: 30, name: "Example COM and ORG", checklist_ID: 301, page_IDs: [400,401],issue_IDs: [201,202,203,204,205,206,207] },
 	{ id: 31, name: "Only example.com", checklist_ID: 301, page_IDs: [402]}
-]).then(() => {
-
-	return db.audits.toArray();
-
-  }).catch(error => {
+]).catch(error => {
 	showError(error);
 });
 
