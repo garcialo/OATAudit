@@ -1,10 +1,15 @@
-// this runs after the page loads
+async function populateAuditList() {
+    await db.audits.each(audit_item => {
+        appendToAuditList(audit_item.id,audit_item.name);
+    });
+}
+
+populateAuditList();
+
 /*
     builds "all_rulesets[]" from _data/rulesets
     traverse all_rulesets and append <option> elements to the <select id="rulesets"
 */
-
-
 test_ruleset = {
     "name": "One rule ruleset",
     "description": "Single rule ruleset for proof-of-concept testing purposes.",
@@ -21,11 +26,11 @@ test2_ruleset = {
     ]
 }
 
-let all_rulesets = [test_ruleset,test2_ruleset];
+const all_rulesets = [test_ruleset,test2_ruleset];
 
 // assuming test data above gets built was _date/rulesets
 
-let ruleset_select_element = document.getElementById("ruleset");
+const ruleset_select_element = document.getElementById("ruleset");
 
 for (let i = 0; i < all_rulesets.length; i++) {
     // given ruleset.name = "The Value"
@@ -42,4 +47,16 @@ for (let i = 0; i < all_rulesets.length; i++) {
 function toLowerSnakeCase(some_text) {
     some_text = some_text.replace(/ /g,"_").toLowerCase();
     return some_text;
+}
+
+function appendToAuditList(text_audit_ID,text_audit_name){
+    let new_li = document.createElement("li");
+    let new_url = document.createElement("a");
+    let url_text = "audit.html?audit_ID=" + text_audit_ID;
+    
+    new_url.setAttribute("href",url_text);
+    new_url.innerHTML = text_audit_name;
+
+    new_li.appendChild(new_url);
+    document.getElementById("continue_audit_list").appendChild(new_li);
 }
