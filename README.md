@@ -1,5 +1,5 @@
 # OAT Audit
-OAT Audit is a web application to help you keep track of manual accessibility audits.
+Open Accessibility Testing (OAT) Audit is a web application to help you keep track of manual accessibility audits.
 
 ## Why?
 In about 2016/2017 I realized there weren't any tools to help keep track of running a manual audit. I created an [accessibility testing checklist](http://checklist.garcialo.com) and then eventually a Google Sheets-based [auditing spreadsheet](http://audit.garcialo.com) to help me keep track of manual audits.
