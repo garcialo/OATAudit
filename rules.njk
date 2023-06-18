@@ -9,7 +9,9 @@ permalink: rules.html
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/rules.js" defer></script>
+        <script src="/dexie.min.js"></script>
+		<script src="/db_setup.js" async></script>
+		<script src="/rules.js" defer></script>
 		<title>Rules - OAT Audit</title>
 	</head>
 	<body>
@@ -18,10 +20,18 @@ permalink: rules.html
                 <!-- renamed if in GET data -->
 				<h1>All Rules</h1>
 		        <table> <!-- look into making editable/toggling to editable view -->
-                        <tr>
+                    <thead>
+					    <tr>
+							<th>ID</th>
                             <th>Name</th>
                             <th>Description</th>
+							<th>WCAG 2.0</th>
+							<th>WCAG 2.1</th>
+							<th>WCAG 2.2</th>
                         </tr>
+					</thead>
+					<tbody id="rules_table_body">
+					</tbody>
                 </table>
 			</main>
 		{% include "footer.njk" %}
