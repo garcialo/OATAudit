@@ -1,4 +1,4 @@
-var db = new Dexie("garciaudit_db");
+var db = new Dexie("OAT_Audit_DB");
 
 db.version(1).stores({
 audits: 'id,name,checklist_ID,*page_IDs,*issue_IDs',
