@@ -17,8 +17,8 @@ db.audits.bulkPut([
 });
 
 db.checklists.bulkPut([
-	{ id: 300, rule_IDs: ["log-1000"], name: "One rule ruleset" },
-	{ id: 301, rule_IDs: ["log-1000", "log-1001"], name: "Two rule ruleset" }
+	{ id: 300, rule_IDs: ["log-1000"], name: "One rule checklist" },
+	{ id: 301, rule_IDs: ["log-1000", "log-1001"], name: "Two rule checklist" }
 ]).catch(error => {
 	showError(error);
 });
