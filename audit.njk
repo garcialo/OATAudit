@@ -19,23 +19,31 @@ permalink: audit.html
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/audit.js" defer></script>
+        <script src="/dexie.min.js"></script>
+		<script src="/db_setup.js" async></script>
+		<script src="/audit.js" defer></script>
 		<title>Audit - OAT Audit</title>
 	</head>
 	<body>
-		<header>Header Content</header>
+		{% include "header.njk" %}
 			<main>
-                <!-- renamed if in GET data -->
-				<h1>Unnamed Minimal Audit</h1>
-				<h2>Actions</h2><!-- Things like "Load" "Export" "Help" -->
-                <!-- maybe should set up a sample audit in IndexedDB if one doesn't exist yet -->
-				<h2>Scope</h2>
-				<h3>Pages</h3>
+				<h1>Audit_Name Checklist_Name</h1>
+				<!-- <button>Change Audit</button>
+
+				<section aria-labelledby="actions">
+				<h2 id="actions">Actions</h2>
+                	<button>Add Page</button>
+					<button>Export</button>
+					<button>Upload Issues</button>
+				</section>
+				-->
+				<section aria-labelledby="pages">
+				<h3 id="pages">Pages</h3>
 				<h4><button>Page 1</button></h4><!-- Accordion Expand Section control -->
 				<ul><!-- List of Page States for Page 1 -->
 					<li><button>Initial</button></li>
 				</ul>
-                <h2>Checks</h2>
+                <h2>Issues</h2>
                     <table> <!-- look into making editable/toggling to editable view -->
                         <tr>
                             <th>Issue Details</th>
@@ -43,6 +51,6 @@ permalink: audit.html
                         </tr>
                     </table>
 			</main>
-		<footer>Footer Content</footer>
+		{% include "footer.njk" %}
 	</body>
 </html>
