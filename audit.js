@@ -51,7 +51,7 @@ function getParams() {
 function buildPagesAndPageStates(page_array,page_state_array) {
     let template_h2 = document.getElementById("pages");
 
-    for (i = page_array.length - 1; i >= 0; i--) {
+    for (let i = page_array.length - 1; i >= 0; i--) {
         let new_page_h3 = document.createElement("h3");
         let new_page_button = document.createElement("button");
 
@@ -59,9 +59,21 @@ function buildPagesAndPageStates(page_array,page_state_array) {
         new_page_h3.appendChild(new_page_button);
         new_page_button.innerHTML = page_array[i].name;
 
+        
         let new_page_state_list = document.createElement("ul");
+        new_page_h3.insertAdjacentElement("afterend",new_page_state_list);
+        
+        for(let j = 0; j < page_state_array.length; j++) {
+            if (page_array[i].id == page_state_array[j].page_ID) {
+                let new_page_state_li = document.createElement("li");
+                let new_page_state_button = document.createElement("button");
 
-        // magic that creates list items and add them as children of the ul
+                new_page_state_list.appendChild(new_page_state_li);
+                new_page_state_li.appendChild(new_page_state_button);
+                new_page_state_button.innerHTML = page_state_array[j].name;
+            }
+        }
+        
     }
 }
 
