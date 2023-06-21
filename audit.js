@@ -12,28 +12,40 @@ getParams();
         //  Getting data for current audit
         //
         const audit = await db.audits.get(current_audit_ID); // can't toArray this; look into it later
+        console.log("audit");
         console.log(audit);
         
         const pages_array = await db.pages.where("id").anyOf(audit.page_IDs).toArray();
+        console.log("pages_array");
         console.log(pages_array);
         
-        // building array of page states ID from page array to make creating page_states_array more consistent with the creation of other arrays/objects
+        // building array of page states ID from page array to make code for creating page_states_array more consistent with the creation of other arrays/objects
         let page_state_IDs = [];
         for (let i = 0; i < pages_array.length; i++) {
             page_state_IDs = page_state_IDs.concat(pages_array[i].page_state_IDs);
         }
 
         const page_states_array = await db.page_states.where("id").anyOf(page_state_IDs).toArray();
+        console.log("page_states_array");
         console.log(page_states_array);
 
-        // const checklist = 
-        // const rules = 
+        const issues_array = await db.issues.where("id").anyOf(audit.issue_IDs).toArray();
+        console.log("issues_array");
+        console.log(issues_array);
+
+        const checklist = await db.checklists.get(audit.checklist_ID);
+        console.log("checklist");
+        console.log(checklist);
+        
+        const rules_array = await db.rules.where("id").anyOf(checklist.rule_IDs).toArray();
+        console.log("rules_array");
+        console.log(rules_array);
 
         //
-        // Build pages section
+        // Build pages and issues sections
         //
-        buildPagesAndPageStates(pages_array,page_states_array)
-
+        buildPagesAndPageStates(pages_array,page_states_array);
+        buildIssuesTable(issues_array,rules_array);
 
     } catch (error) {
     console.log(error);
@@ -52,55 +64,55 @@ function buildPagesAndPageStates(page_array,page_state_array) {
     let template_h2 = document.getElementById("pages");
 
     for (let i = page_array.length - 1; i >= 0; i--) {
-        let new_page_h3 = document.createElement("h3");
-        let new_page_button = document.createElement("button");
+        let page_h3 = document.createElement("h3");
+        let page_button = document.createElement("button");
 
-        template_h2.insertAdjacentElement("afterend",new_page_h3);
-        new_page_h3.appendChild(new_page_button);
-        new_page_button.innerHTML = page_array[i].name;
+        template_h2.insertAdjacentElement("afterend",page_h3);
+        page_h3.appendChild(page_button);
+        page_button.innerHTML = page_array[i].name;
 
         
-        let new_page_state_list = document.createElement("ul");
-        new_page_h3.insertAdjacentElement("afterend",new_page_state_list);
-        
+        let page_state_list = document.createElement("ul");
+        page_h3.insertAdjacentElement("afterend",page_state_list);
+
         for(let j = 0; j < page_state_array.length; j++) {
             if (page_array[i].id == page_state_array[j].page_ID) {
-                let new_page_state_li = document.createElement("li");
-                let new_page_state_button = document.createElement("button");
+                let page_state_li = document.createElement("li");
+                let page_state_button = document.createElement("button");
 
-                new_page_state_list.appendChild(new_page_state_li);
-                new_page_state_li.appendChild(new_page_state_button);
-                new_page_state_button.innerHTML = page_state_array[j].name;
+                page_state_list.appendChild(page_state_li);
+                page_state_li.appendChild(page_state_button);
+                page_state_button.innerHTML = page_state_array[j].name;
             }
         }
         
     }
 }
 
-/*
+ function buildIssuesTable(issue_array,rule_array) {
+    let template_tbody = document.getElementById("issues_table_body");
 
-Needed content for this page:
-1. List of pages and lists of their page_states
--- audit_ID > audits.page_IDs > pages.name/pages.page_state_IDs > page_state_name
+    for (let i = 0; i < issue_array.length; i++) {
+        let issue_row = document.createElement("tr");
+        let issue_description_cell = document.createElement("td");
+        let issue_status_cell = document.createElement("td");
+        let rule_description_cell = document.createElement("td");
+        
 
-<h2 id="pages">Pages</h2>
-<h3><button> page_name </button></h3> - expand/collapse showing page states
-<ul><li> page_state_name </li></ul>
+        issue_description_cell.innerHTML = issue_array[i].description;
+        issue_status_cell.innerHTML = issue_array[i].status;
 
+        let current_rule_ID = issue_array[i].rule_ID;
+        for (let j = 0; j < rule_array.length; j++) {
+            if (current_rule_ID == rule_array[j].id) {
+                rule_description_cell.innerHTML = rule_array[j].description;
+            }
+        }
 
-
-2. List of rules and list of issues
-If audit doesn't have issue_IDs[], initialize one with issues.status = "Incomplete" for each rule
-else 
-Make the table
--- audit_ID > audits.issue_IDs > issues.description/issues.status/issues.rule_ID > rules.description
-
-<tbody id="issues">
-    <tr>
-        <td> issue_description </td>
-        <td> issue_status </td>
-        <td> rule_description </td>
-    </tr>
-</tbody>
-*/
-
+        issue_row.appendChild(issue_description_cell);
+        issue_row.appendChild(issue_status_cell);
+        issue_row.appendChild(rule_description_cell);
+        
+        template_tbody.appendChild(issue_row);
+    }
+ }
