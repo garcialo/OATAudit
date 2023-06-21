@@ -1,6 +1,45 @@
-const current_audit_ID = -1;
-const current_checklist_ID = -1;
-const current_page_state_ID = -1;
+let current_audit_ID = -1;
+let current_checklist_ID = -1;
+let current_page_state_ID = -1;
+
+getParams();
+
+(async()=>{
+
+    try {
+
+        //
+        //  Getting data for current audit
+        //
+        const audit = await db.audits.get(current_audit_ID); // can't toArray this; look into it later
+        console.log(audit);
+        
+        const pages_array = await db.pages.where("id").anyOf(audit.page_IDs).toArray();
+        console.log(pages_array);
+        
+        // building array of page states ID from page array to make creating page_states_array more consistent with the creation of other arrays/objects
+        let page_state_IDs = [];
+        for (let i = 0; i < pages_array.length; i++) {
+            page_state_IDs = page_state_IDs.concat(pages_array[i].page_state_IDs);
+        }
+
+        const page_states_array = await db.page_states.where("id").anyOf(page_state_IDs).toArray();
+        console.log(page_states_array);
+
+        // const checklist = 
+        // const rules = 
+
+        //
+        // Build pages section
+        //
+        buildPagesAndPageStates(pages_array,page_states_array)
+
+
+    } catch (error) {
+    console.log(error);
+    }
+
+})()
 
 function getParams() {
     let params = new URLSearchParams(document.location.search);
@@ -9,15 +48,22 @@ function getParams() {
     current_page_state_ID = parseInt(params.get("page_state_ID"));
 }
 
-(async()=>{
+function buildPagesAndPageStates(page_array,page_state_array) {
+    let template_h2 = document.getElementById("pages");
 
-    try {
+    for (i = page_array.length - 1; i >= 0; i--) {
+        let new_page_h3 = document.createElement("h3");
+        let new_page_button = document.createElement("button");
 
-    } catch (error) {
-    console.log(error);
+        template_h2.insertAdjacentElement("afterend",new_page_h3);
+        new_page_h3.appendChild(new_page_button);
+        new_page_button.innerHTML = page_array[i].name;
+
+        let new_page_state_list = document.createElement("ul");
+
+        // magic that creates list items and add them as children of the ul
     }
-
-})()
+}
 
 /*
 
@@ -44,3 +90,5 @@ Make the table
         <td> rule_description </td>
     </tr>
 </tbody>
+*/
+
