@@ -33,23 +33,28 @@ permalink: audit.html
 				<section aria-labelledby="actions">
 				<h2 id="actions">Actions</h2>
                 	<button>Add Page</button>
+					<button>Add Page State</button>
 					<button>Export</button>
 					<button>Upload Issues</button>
 				</section>
 				-->
 				<section aria-labelledby="pages">
-				<h3 id="pages">Pages</h3>
-				<h4><button>Page 1</button></h4><!-- Accordion Expand Section control -->
+				<h2 id="pages">Pages</h2>
+				<h3><button>Page 1</button></h3><!-- Accordion Expand Section control -->
 				<ul><!-- List of Page States for Page 1 -->
 					<li><button>Initial</button></li>
 				</ul>
-                <h2>Issues</h2>
+				</section>
+				<section aria-labelledby="issues">
+                <h2 id="issues">Issues</h2>
                     <table> <!-- look into making editable/toggling to editable view -->
                         <tr>
                             <th>Issue Details</th>
+							<th>Issue Status</th>
                             <th>Check/Rule Description</th>
                         </tr>
                     </table>
+				</section>
 			</main>
 		{% include "footer.njk" %}
 	</body>
