@@ -1,5 +1,7 @@
+let new_audit_name = "";
 let current_audit_ID = -1;
 let current_checklist_ID = -1;
+let current_page_ID = -1;
 let current_page_state_ID = -1;
 
 getParams();
@@ -55,8 +57,10 @@ getParams();
 
 function getParams() {
     let params = new URLSearchParams(document.location.search);
+    current_audit_name = params.get("audit_name");
     current_audit_ID = parseInt(params.get("audit_ID"));
     current_checklist_ID = parseInt(params.get("checklist_ID"));
+    current_page_ID = parseInt(params.get("page_ID"));
     current_page_state_ID = parseInt(params.get("page_state_ID"));
 }
 
