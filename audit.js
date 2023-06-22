@@ -93,13 +93,29 @@ function buildPagesAndPageStates(page_array,page_state_array) {
     let template_tbody = document.getElementById("issues_table_body");
 
     for (let i = 0; i < issue_array.length; i++) {
-        let issue_row = document.createElement("tr");
-        let issue_description_cell = document.createElement("td");
-        let issue_status_cell = document.createElement("td");
-        let rule_description_cell = document.createElement("td");
+        const issue_row = document.createElement("tr");
+        const issue_description_cell = document.createElement("td");
+            const issue_description_textarea = document.createElement("textarea");
+            const issue_description_edit_save_button = document.createElement("button");
+        const issue_status_cell = document.createElement("td");
+        const rule_description_cell = document.createElement("td");
         
+        const issue_details_th_ID = "issue_description_th";
+        const rule_description_td_ID = "rule_description-"; // will change this once I figure out multiple instances of issues
 
-        issue_description_cell.innerHTML = issue_array[i].description;
+        issue_description_textarea.setAttribute("aria-labelledby",issue_details_th_ID);
+        issue_description_textarea.setAttribute("readonly","");
+        issue_description_textarea.setAttribute("name",issue_array[i].id);
+        
+        if (issue_array[i].description) {
+            issue_description_textarea.innerHTML = issue_array[i].description;
+        }
+        else {
+            issue_description_textarea.innerHTML = "";
+        }        
+        issue_description_edit_save_button.innerHTML = "Edit Details";
+        issue_description_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
+
         issue_status_cell.innerHTML = issue_array[i].status;
 
         let current_rule_ID = issue_array[i].rule_ID;
@@ -109,6 +125,8 @@ function buildPagesAndPageStates(page_array,page_state_array) {
             }
         }
 
+        issue_description_cell.appendChild(issue_description_textarea);
+        issue_description_cell.appendChild(issue_description_edit_save_button);
         issue_row.appendChild(issue_description_cell);
         issue_row.appendChild(issue_status_cell);
         issue_row.appendChild(rule_description_cell);
