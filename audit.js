@@ -87,6 +87,10 @@ function buildPagesAndPageStates(page_array,page_state_array) {
         }
         
     }
+
+    const all_pages_button = document.createElement("button");
+    all_pages_button.innerHTML = "All Pages";
+    template_h2.insertAdjacentElement("afterend",all_pages_button);
 }
 
  function buildIssuesTable(issue_array,rule_array) {
