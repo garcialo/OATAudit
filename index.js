@@ -2,15 +2,23 @@ populateAuditList();
 populateChecklistOptions();
 
 async function populateAuditList() {
-    await db.audits.each(audit_item => {
-        appendToAuditList(audit_item.id,audit_item.name);
-    });
+    try {
+        await db.audits.each(audit_item => {
+            appendToAuditList(audit_item.id,audit_item.name);
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 async function populateChecklistOptions() {
-    await db.checklists.each(checklist_item => {
+    try {
+        await db.checklists.each(checklist_item => {
         appendToSelectOptions(checklist_item.id,checklist_item.name);
-    });
+        });
+    } catch (error) {
+    console.log(error);
+    }
 }
 
 function appendToAuditList(text_audit_ID,text_audit_name){

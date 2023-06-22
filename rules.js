@@ -2,9 +2,13 @@ const rules_table_body = document.getElementById("rules_table_body");
 buildTable();
 
 async function buildTable() {
-    await db.rules.each(rule => {
-        appendRuleRow(rule.id,rule.rule_name,rule.description,rule.accessibility_requirements);
-    });
+    try {
+        await db.rules.each(rule => {
+            appendRuleRow(rule.id,rule.rule_name,rule.description,rule.accessibility_requirements);
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function appendRuleRow(id, name, desc, requirements_array) {
