@@ -1,10 +1,4 @@
-let new_audit_name = "";
-let current_audit_ID = -1;
-let current_checklist_ID = -1;
-let current_page_ID = -1;
-let current_page_state_ID = -1;
-
-getParams();
+const current = getWellFormedParams();
 
 (async()=>{
 
@@ -13,7 +7,7 @@ getParams();
         //
         //  Getting data for current audit
         //
-        const audit = await db.audits.get(current_audit_ID); // can't toArray this; look into it later
+        const audit = await db.audits.get(current["audit_ID"]);
         console.log("audit");
         console.log(audit);
         
@@ -55,13 +49,42 @@ getParams();
 
 })()
 
-function getParams() {
-    let params = new URLSearchParams(document.location.search);
-    current_audit_name = params.get("audit_name");
-    current_audit_ID = parseInt(params.get("audit_ID"));
-    current_checklist_ID = parseInt(params.get("checklist_ID"));
-    current_page_ID = parseInt(params.get("page_ID"));
-    current_page_state_ID = parseInt(params.get("page_state_ID"));
+function getWellFormedParams() {
+    const given_params = new URLSearchParams(document.location.search);
+    const future_current = [];
+
+    given_audit_ID = parseInt(given_params.get("audit_ID"));
+    given_checklist_ID = parseInt(given_params.get("checklist_ID"));
+    given_page_ID = parseInt(given_params.get("page_ID"));
+    given_page_state_ID = parseInt(given_params.get("page_state_ID"));
+    num_params = given_params.size;
+
+    if (given_audit_ID < 0 || given_checklist_ID < 0 || given_page_ID < 0 || given_page_state_ID < 0) {
+        // ID values will never be negative
+        alert("Parameters are malformed. Redirect to error page.");
+    } else if (
+            !(
+                (num_params == 1 && given_checklist_ID) || 
+                (num_params == 1 && given_audit_ID) ||
+                (num_params == 2 && (given_audit_ID && given_page_ID)) ||
+                (num_params == 2 && (given_audit_ID && given_page_state_ID))
+            )
+        ) {
+        // OAT Audit should only create the following URL parameter patterns
+        // checklist only - creating a new audit
+        // audit only - load specified audit; display issues for all page states for all pages
+        // audit and page - load specified audit; display issues for all page states for specified page
+        // audit and page state - load specified audit; display issues for specified page state
+        alert("Unexpected parameter configuration. Redirect to error page for options.")
+    } else
+    {
+        if(given_audit_ID) future_current["audit_ID"] = given_audit_ID;
+        if(given_checklist_ID) future_current["checklist_ID"] = given_checklist_ID;
+        if(given_page_ID) future_current["page_ID"] = given_page_ID;
+        if(given_page_state_ID) future_current["page_state_ID"] = given_page_state_ID;
+    }
+
+    return future_current;
 }
 
 function buildPagesAndPageStates(page_array,page_state_array) {
