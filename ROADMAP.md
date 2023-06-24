@@ -16,6 +16,7 @@
 * Checklist creation
 * Basic rule creation
 * ACT rule creation
+* Removing rules/checklists/checking if rule used by checklist/checklist used by audits
 * Move to Dexie.on.populate for initial db setup
 * Set proper schema with auto-incrementing indexes
 * Make repo public and move roadmap to the Wiki
