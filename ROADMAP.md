@@ -14,6 +14,7 @@
 * Load rules from data folder
 * Add all rules to data folder
 * Checklist creation
+* index - maybe provide a rule preview when selecting a checklist - assume users don't know which rules are in each checklist
 * Basic rule creation
 * ACT rule creation
 * Removing rules/checklists/checking if rule used by checklist/checklist used by audits
