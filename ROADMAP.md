@@ -1,9 +1,11 @@
 # Roadmap
 
 ## ToDoing
-* Validate URL parameters for Audit for getting into the correct state (New Audit / Existing Audit and updating H1)
-
+* Move entire audit table creation into JS
+ 
 ## ToDo
+* Make Page / Page State buttons work to hide content, update table caption
+* Add "Issue Number" to the DB schema and audit table
 * Change "issue_description" variables to "issue_details" consistently
 * Allowing for different Audit views (table vs ...cards?)
 * Flesh out Existing Audit features (edit/lock issues details, add new issue, add page, add page_state, switching all pages/single page/single pagestate views, saving things to IndexedDB)
@@ -30,8 +32,9 @@
 * I18n?
 * Explore feature creep ideas
 
-
 ## ToDone
 * Basic HTML for Index, Audit, Rules pages
 * IndexedDB schema created, sample data created
 * Use IndexedDB content for basic Index, Audit, Rules pages
+* Validate URL parameters for Audit for getting into the correct state
+* Table view built out for all views

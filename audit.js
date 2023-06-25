@@ -198,9 +198,7 @@ function buildPagesAndPageStates(page_array,page_state_array) {
         for (let j = 0; j < rule_array.length; j++) {
             if (current_rule_ID == rule_array[j].id) {
                 rule_description_cell.innerHTML = rule_array[j].description;
-
-                // set a11yrequirements
-
+                a11y_requirements_cell.innerHTML = rule_array[j].accessibility_requirements.toString();
                 rule_id_cell.innerHTML = rule_array[j].id;
                 rule_name_cell.innerHTML = rule_array[j].rule_name; // rule table is named differently
             }
@@ -213,19 +211,9 @@ function buildPagesAndPageStates(page_array,page_state_array) {
             }
         }
 
-        console.log("here");
-        console.log(issue_array);
-        console.log(page_array);
         let current_page_ID = issue_array[i].page_ID;
         for (let j = 0; j < page_array.length; j++) {
-            console.log("infor: " + j);
-            console.log("current_page_ID and array ID");
-                console.log(current_page_ID);
-                console.log(page_array[j].id);
             if (current_page_ID == page_array[j].id) {
-                console.log("current_page_ID and array ID");
-                console.log(current_page_ID);
-                console.log(page_array[j].id);
                 page_name_cell.innerHTML = page_array[j].name;
             }
         }
@@ -248,27 +236,3 @@ function buildPagesAndPageStates(page_array,page_state_array) {
         given_tbody.appendChild(issue_row);
     }
  }
-
- /*
-
- issue variables
-x  ID
-x  page_ID - used to get page name
-x  rule_ID - shown/used to get rule name
-x  status
-x  page_state_ID - used to get page state name
-x  description
-
-
- rule variables
-  ID
-x  rule_name
-x  description
-x  accessibility_requirements
-
-Order
-
-iss_det - iss_stat - rule_desc - rule_acc_req - ps name - p name - issue id - issue.rule id - rule name
-
-
- */
