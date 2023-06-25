@@ -1,7 +1,7 @@
 # Roadmap
 
 ## ToDoing
-* Move entire audit table creation into JS
+* TBD
  
 ## ToDo
 * Add "Issue Number" to the DB schema and audit table
@@ -37,3 +37,4 @@
 * Use IndexedDB content for basic Index, Audit, Rules pages
 * Validate URL parameters for Audit for getting into the correct state
 * Table view built out for all views
+* Move entire audit table creation into JS

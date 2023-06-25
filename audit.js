@@ -71,7 +71,11 @@ const current = getWellFormedParams();
         // Build pages and issues sections
         //
         buildPagesAndPageStates(pages_array,page_states_array);
-        buildIssuesTable(issues_array,rules_array,pages_array,page_states_array);
+
+        issues_heading_element = document.getElementById("issues");
+
+        buildIssuesTable(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
+        //buildIssuesCards(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
 
     } catch (error) {
     console.log(error);
@@ -150,13 +154,77 @@ function buildPagesAndPageStates(page_array,page_state_array) {
     template_h2.insertAdjacentElement("afterend",all_pages_button);
 }
 
- function buildIssuesTable(issue_array,rule_array,page_array,page_state_array) {
-    const template_tbody = document.getElementById("issues_table_body");
-    console.log(template_tbody);
-    buildIssuesRows(issue_array,rule_array,page_array,page_state_array,template_tbody);
+function buildIssuesTable(issue_array,rule_array,page_array,page_state_array,parent_element) {
+    // Currently always builds an "All Issues" table
+    // Page and Page State buttons will just hide columns/cells that are out of scope instead of having to rebuild the table every time
+    
+    // Creating elements
+    const table_element = document.createElement("table");
+        const table_caption = document.createElement("caption");
+        const thead_element = buildIssuesTHead();
+        const tbody_element = buildIssuesTBody(issue_array,rule_array,page_array,page_state_array);
+
+    // Setting attributes
+    table_caption.setAttribute("id","table_caption");
+
+    // Setting innerHTML
+    table_caption.innerHTML = "All Issues";
+
+    // Appending elements
+    
+    table_element.appendChild(table_caption);
+    table_element.appendChild(thead_element);
+    table_element.appendChild(tbody_element);
+
+    parent_element.insertAdjacentElement("afterend",table_element);
  }
 
- function buildIssuesRows(issue_array,rule_array,page_array,page_state_array,given_tbody) {
+function buildIssuesTHead() {
+    // Creating elements
+    const thead = document.createElement("thead");
+    const header_row = document.createElement("tr");
+    const issue_details_header = document.createElement("th");
+    const issue_status_header = document.createElement("th");
+    const rule_description_header = document.createElement("th");
+    const a11y_requirements_header = document.createElement("th");
+    const page_state_name_header = document.createElement("th");
+    const page_name_header = document.createElement("th");
+    const issue_id_header = document.createElement("th");
+    const rule_id_header = document.createElement("th");
+    const rule_name_header = document.createElement("th");
+
+    // Setting attributes
+    issue_details_header.setAttribute("id","issue_description_th");
+
+    // Setting innerHTMLs
+    issue_details_header.innerHTML = "Issue Details";
+    issue_status_header.innerHTML = "Issue Status";
+    rule_description_header.innerHTML = "Check/Rule Description";
+    a11y_requirements_header.innerHTML = "Required By";
+    page_state_name_header.innerHTML = "Page State Name";
+    page_name_header.innerHTML = "Page Name";
+    issue_id_header.innerHTML = "Issue ID";
+    rule_id_header.innerHTML = "Rule ID";
+    rule_name_header.innerHTML = "Rule Name";
+
+    // Appending elements
+    header_row.appendChild(issue_details_header);
+    header_row.appendChild(issue_status_header);
+    header_row.appendChild(rule_description_header);
+    header_row.appendChild(a11y_requirements_header);
+    header_row.appendChild(page_state_name_header);
+    header_row.appendChild(page_name_header);
+    header_row.appendChild(issue_id_header);
+    header_row.appendChild(rule_id_header);
+    header_row.appendChild(rule_name_header);
+
+    thead.appendChild(header_row);
+    return thead;
+}
+
+ function buildIssuesTBody(issue_array,rule_array,page_array,page_state_array) {
+    const tbody = document.createElement("tbody");
+
     for (let i = 0; i < issue_array.length; i++) {
         // Creating elements
         const issue_row = document.createElement("tr");
@@ -233,6 +301,8 @@ function buildPagesAndPageStates(page_array,page_state_array) {
         issue_row.appendChild(rule_id_cell);
         issue_row.appendChild(rule_name_cell);
         
-        given_tbody.appendChild(issue_row);
+        tbody.appendChild(issue_row);
     }
+
+    return tbody;
  }
