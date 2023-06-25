@@ -3,6 +3,36 @@ const current = getWellFormedParams();
 (async()=>{
 
     try {
+        /*
+        Sets up the page into one of four states
+            1. IF Checklist provided == "New Audit" state
+                if checklist invalid, send to error page
+            2. Else if Audit provided == "Continue Audit" state and set view to "all pages"
+                if audit invalid, send to error page
+            3. If Page provided == "Continue Audit" state
+                if get results for provided page, change view to "this page"
+            4. Else if page state provided
+                if get results for provieed page state, change view to "this page state"
+        */
+        if (current["checklist_ID"]) {
+            alert("New Audit!");
+        }
+        else if (current["audit_ID"]) {
+            let alert_string = "Continuing Audit";
+            
+
+            if (current["page_ID"]) {
+                alert_string += " and loading Page";
+            } else if (current["page_state_ID"]) {
+                alert_string += " and loading Page State";
+            }
+
+            alert(alert_string);
+        }
+        else {
+            alert("This shouldn't happen.");
+        }
+
 
         //
         //  Getting data for current audit
@@ -41,7 +71,7 @@ const current = getWellFormedParams();
         // Build pages and issues sections
         //
         buildPagesAndPageStates(pages_array,page_states_array);
-        buildIssuesTable(issues_array,rules_array);
+        buildIssuesTable(issues_array,rules_array,pages_array,page_states_array);
 
     } catch (error) {
     console.log(error);
@@ -120,48 +150,125 @@ function buildPagesAndPageStates(page_array,page_state_array) {
     template_h2.insertAdjacentElement("afterend",all_pages_button);
 }
 
- function buildIssuesTable(issue_array,rule_array) {
-    let template_tbody = document.getElementById("issues_table_body");
+ function buildIssuesTable(issue_array,rule_array,page_array,page_state_array) {
+    const template_tbody = document.getElementById("issues_table_body");
+    console.log(template_tbody);
+    buildIssuesRows(issue_array,rule_array,page_array,page_state_array,template_tbody);
+ }
 
+ function buildIssuesRows(issue_array,rule_array,page_array,page_state_array,given_tbody) {
     for (let i = 0; i < issue_array.length; i++) {
+        // Creating elements
         const issue_row = document.createElement("tr");
         const issue_description_cell = document.createElement("td");
             const issue_description_textarea = document.createElement("textarea");
             const issue_description_edit_save_button = document.createElement("button");
         const issue_status_cell = document.createElement("td");
         const rule_description_cell = document.createElement("td");
-        
+        const a11y_requirements_cell = document.createElement("td");
+        const page_state_name_cell = document.createElement("td");
+        const page_name_cell = document.createElement("td");
+        const issue_id_cell = document.createElement("td");
+        const rule_id_cell = document.createElement("td");
+        const rule_name_cell = document.createElement("td");
+
+
+        // Setting attributes
         const issue_details_th_ID = "issue_description_th";
         const rule_description_td_ID = "rule_description-"; // will change this once I figure out multiple instances of issues
 
         issue_description_textarea.setAttribute("aria-labelledby",issue_details_th_ID);
         issue_description_textarea.setAttribute("readonly","");
         issue_description_textarea.setAttribute("name",issue_array[i].id);
-        
+        issue_description_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
+
+        // Setting innerHTMLs
         if (issue_array[i].description) {
             issue_description_textarea.innerHTML = issue_array[i].description;
         }
         else {
             issue_description_textarea.innerHTML = "";
-        }        
+        }
         issue_description_edit_save_button.innerHTML = "Edit Details";
-        issue_description_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
 
         issue_status_cell.innerHTML = issue_array[i].status;
+        issue_id_cell.innerHTML = issue_array[i].id;
 
         let current_rule_ID = issue_array[i].rule_ID;
         for (let j = 0; j < rule_array.length; j++) {
             if (current_rule_ID == rule_array[j].id) {
                 rule_description_cell.innerHTML = rule_array[j].description;
+
+                // set a11yrequirements
+
+                rule_id_cell.innerHTML = rule_array[j].id;
+                rule_name_cell.innerHTML = rule_array[j].rule_name; // rule table is named differently
             }
         }
 
+        let current_page_state_ID = issue_array[i].page_state_ID;
+        for (let j = 0; j < page_state_array.length; j++) {
+            if (current_page_state_ID == page_state_array[j].id) {
+                page_state_name_cell.innerHTML = page_state_array[j].name;
+            }
+        }
+
+        console.log("here");
+        console.log(issue_array);
+        console.log(page_array);
+        let current_page_ID = issue_array[i].page_ID;
+        for (let j = 0; j < page_array.length; j++) {
+            console.log("infor: " + j);
+            console.log("current_page_ID and array ID");
+                console.log(current_page_ID);
+                console.log(page_array[j].id);
+            if (current_page_ID == page_array[j].id) {
+                console.log("current_page_ID and array ID");
+                console.log(current_page_ID);
+                console.log(page_array[j].id);
+                page_name_cell.innerHTML = page_array[j].name;
+            }
+        }
+
+
+
+        // Appending elements
         issue_description_cell.appendChild(issue_description_textarea);
         issue_description_cell.appendChild(issue_description_edit_save_button);
         issue_row.appendChild(issue_description_cell);
         issue_row.appendChild(issue_status_cell);
         issue_row.appendChild(rule_description_cell);
+        issue_row.appendChild(a11y_requirements_cell);
+        issue_row.appendChild(page_state_name_cell);
+        issue_row.appendChild(page_name_cell);
+        issue_row.appendChild(issue_id_cell);
+        issue_row.appendChild(rule_id_cell);
+        issue_row.appendChild(rule_name_cell);
         
-        template_tbody.appendChild(issue_row);
+        given_tbody.appendChild(issue_row);
     }
  }
+
+ /*
+
+ issue variables
+x  ID
+x  page_ID - used to get page name
+x  rule_ID - shown/used to get rule name
+x  status
+x  page_state_ID - used to get page state name
+x  description
+
+
+ rule variables
+  ID
+x  rule_name
+x  description
+x  accessibility_requirements
+
+Order
+
+iss_det - iss_stat - rule_desc - rule_acc_req - ps name - p name - issue id - issue.rule id - rule name
+
+
+ */
