@@ -180,7 +180,7 @@ function buildIssuesTHead() {
     const rule_name_header = document.createElement("th");
 
     // Setting attributes
-    issue_details_header.setAttribute("id","issue_description_th");
+    issue_details_header.setAttribute("id","issue_details_th");
 
     // Setting innerHTMLs
     issue_details_header.innerHTML = "Issue Details";
@@ -214,9 +214,9 @@ function buildIssuesTHead() {
     for (let i = 0; i < issue_array.length; i++) {
         // Creating elements
         const issue_row = document.createElement("tr");
-        const issue_description_cell = document.createElement("td");
-            const issue_description_textarea = document.createElement("textarea");
-            const issue_description_edit_save_button = document.createElement("button");
+        const issue_details_cell = document.createElement("td");
+            const issue_details_textarea = document.createElement("textarea");
+            const issue_details_edit_save_button = document.createElement("button");
         const issue_status_cell = document.createElement("td");
         const rule_description_cell = document.createElement("td");
         const a11y_requirements_cell = document.createElement("td");
@@ -226,24 +226,23 @@ function buildIssuesTHead() {
         const rule_id_cell = document.createElement("td");
         const rule_name_cell = document.createElement("td");
 
-
         // Setting attributes
-        const issue_details_th_ID = "issue_description_th";
+        const issue_details_th_ID = "issue_details_th";
         const rule_description_td_ID = "rule_description-"; // will change this once I figure out multiple instances of issues
 
-        issue_description_textarea.setAttribute("aria-labelledby",issue_details_th_ID);
-        issue_description_textarea.setAttribute("readonly","");
-        issue_description_textarea.setAttribute("name",issue_array[i].id);
-        issue_description_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
+        issue_details_textarea.setAttribute("aria-labelledby",issue_details_th_ID);
+        issue_details_textarea.setAttribute("readonly","");
+        issue_details_textarea.setAttribute("name",issue_array[i].id);
+        issue_details_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
 
         // Setting innerHTMLs
         if (issue_array[i].description) {
-            issue_description_textarea.innerHTML = issue_array[i].description;
+            issue_details_textarea.innerHTML = issue_array[i].description;
         }
         else {
-            issue_description_textarea.innerHTML = "";
+            issue_details_textarea.innerHTML = "";
         }
-        issue_description_edit_save_button.innerHTML = "Edit Details";
+        issue_details_edit_save_button.innerHTML = "Edit Details";
 
         issue_status_cell.innerHTML = issue_array[i].status;
         issue_id_cell.innerHTML = issue_array[i].id;
@@ -272,12 +271,10 @@ function buildIssuesTHead() {
             }
         }
 
-
-
         // Appending elements
-        issue_description_cell.appendChild(issue_description_textarea);
-        issue_description_cell.appendChild(issue_description_edit_save_button);
-        issue_row.appendChild(issue_description_cell);
+        issue_details_cell.appendChild(issue_details_textarea);
+        issue_details_cell.appendChild(issue_details_edit_save_button);
+        issue_row.appendChild(issue_details_cell);
         issue_row.appendChild(issue_status_cell);
         issue_row.appendChild(rule_description_cell);
         issue_row.appendChild(a11y_requirements_cell);

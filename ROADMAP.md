@@ -1,7 +1,7 @@
 # Roadmap
 
 ## ToDoing
-* * Change "issue_description" variables to "issue_details" consistently
+* 
  
 ## ToDo
 * Add "Issue Number" to the DB schema and audit table
@@ -37,3 +37,4 @@
 * Validate URL parameters for Audit for getting into the correct state
 * Table view built out for all views
 * Move entire audit table creation into JS
+* Change "issue_description" variables to "issue_details"
