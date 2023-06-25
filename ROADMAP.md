@@ -1,11 +1,10 @@
 # Roadmap
 
 ## ToDoing
-* TBD
+* * Change "issue_description" variables to "issue_details" consistently
  
 ## ToDo
 * Add "Issue Number" to the DB schema and audit table
-* Change "issue_description" variables to "issue_details" consistently
 * Allowing for different Audit views (table vs ...cards?)
 * Flesh out Existing Audit features (edit/lock issues details, add new issue, add page, add page_state, switching all pages/single page/single pagestate views, saving things to IndexedDB, updating heading and table caption)
 * Deleting stuff (issues, pages, page_states)

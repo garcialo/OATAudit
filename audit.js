@@ -1,87 +1,73 @@
 const current = getWellFormedParams();
 
-(async()=>{
+/*
+Sets up the page into one of four states
+    1. IF Checklist provided == "New Audit" state
+        if checklist invalid, send to error page
+    2. Else if Audit provided == "Continue Audit" state and set view to "all pages"
+        if audit invalid, send to error page
+    3. If Page provided == "Continue Audit" state
+        if get results for provided page, change view to "this page"
+    4. Else if page state provided
+        if get results for provided page state, change view to "this page state"
+*/
+if (current["checklist_ID"]) {
+    alert("New Audit!");
+}
+else if (current["audit_ID"]) {
+    let alert_string = "Continuing Audit";
+    
+    (async()=>{
 
-    try {
-        /*
-        Sets up the page into one of four states
-            1. IF Checklist provided == "New Audit" state
-                if checklist invalid, send to error page
-            2. Else if Audit provided == "Continue Audit" state and set view to "all pages"
-                if audit invalid, send to error page
-            3. If Page provided == "Continue Audit" state
-                if get results for provided page, change view to "this page"
-            4. Else if page state provided
-                if get results for provieed page state, change view to "this page state"
-        */
-        if (current["checklist_ID"]) {
-            alert("New Audit!");
-        }
-        else if (current["audit_ID"]) {
-            let alert_string = "Continuing Audit";
+        try {
+            //
+            //  Getting data for current audit
+            //
+            const audit = await db.audits.get(current["audit_ID"]);          
+            const checklist = await db.checklists.get(audit.checklist_ID);
+            const rules_array = await db.rules.where("id").anyOf(checklist.rule_IDs).toArray();
+            const issues_array = await db.issues.where("id").anyOf(audit.issue_IDs).toArray();
+            const pages_array = await db.pages.where("id").anyOf(audit.page_IDs).toArray();
+            
+            // building array of page states ID from pages_array to make code for creating page_states_array more consistent with the creation of other arrays/objects
+            let page_state_IDs = [];
+            for (let i = 0; i < pages_array.length; i++) {
+                page_state_IDs = page_state_IDs.concat(pages_array[i].page_state_IDs);
+            }
+            const page_states_array = await db.page_states.where("id").anyOf(page_state_IDs).toArray();
             
 
-            if (current["page_ID"]) {
-                alert_string += " and loading Page";
-            } else if (current["page_state_ID"]) {
-                alert_string += " and loading Page State";
-            }
+            //
+            // Build pages and issues sections
+            //
+            buildPagesAndPageStates(pages_array,page_states_array);
 
-            alert(alert_string);
-        }
-        else {
-            alert("This shouldn't happen.");
-        }
+            issues_heading_element = document.getElementById("issues");
 
+            buildIssuesTable(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
+            //buildIssuesCards(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
 
-        //
-        //  Getting data for current audit
-        //
-        const audit = await db.audits.get(current["audit_ID"]);
-        console.log("audit");
-        console.log(audit);
-        
-        const pages_array = await db.pages.where("id").anyOf(audit.page_IDs).toArray();
-        console.log("pages_array");
-        console.log(pages_array);
-        
-        // building array of page states ID from page array to make code for creating page_states_array more consistent with the creation of other arrays/objects
-        let page_state_IDs = [];
-        for (let i = 0; i < pages_array.length; i++) {
-            page_state_IDs = page_state_IDs.concat(pages_array[i].page_state_IDs);
+        } catch (error) {
+        console.log(error);
         }
 
-        const page_states_array = await db.page_states.where("id").anyOf(page_state_IDs).toArray();
-        console.log("page_states_array");
-        console.log(page_states_array);
+    })()
 
-        const issues_array = await db.issues.where("id").anyOf(audit.issue_IDs).toArray();
-        console.log("issues_array");
-        console.log(issues_array);
-
-        const checklist = await db.checklists.get(audit.checklist_ID);
-        console.log("checklist");
-        console.log(checklist);
-        
-        const rules_array = await db.rules.where("id").anyOf(checklist.rule_IDs).toArray();
-        console.log("rules_array");
-        console.log(rules_array);
-
-        //
-        // Build pages and issues sections
-        //
-        buildPagesAndPageStates(pages_array,page_states_array);
-
-        issues_heading_element = document.getElementById("issues");
-
-        buildIssuesTable(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
-        //buildIssuesCards(issues_array,rules_array,pages_array,page_states_array,issues_heading_element);
-
-    } catch (error) {
-    console.log(error);
+    if (current["page_ID"]) {
+        alert_string += " and loading Page";
+    } else if (current["page_state_ID"]) {
+        alert_string += " and loading Page State";
     }
 
-})()
+    alert(alert_string);
+}
+else {
+    alert("This shouldn't happen.");
+}
+
+//
+// Functions
+//
 
 function getWellFormedParams() {
     const given_params = new URLSearchParams(document.location.search);
@@ -177,7 +163,7 @@ function buildIssuesTable(issue_array,rule_array,page_array,page_state_array,par
     table_element.appendChild(tbody_element);
 
     parent_element.insertAdjacentElement("afterend",table_element);
- }
+}
 
 function buildIssuesTHead() {
     // Creating elements
@@ -305,4 +291,4 @@ function buildIssuesTHead() {
     }
 
     return tbody;
- }
+}
