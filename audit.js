@@ -216,7 +216,6 @@ function buildIssuesTHead() {
         const issue_row = document.createElement("tr");
         const issue_details_cell = document.createElement("td");
             const issue_details_textarea = document.createElement("textarea");
-            const issue_details_edit_save_button = document.createElement("button");
         const issue_status_cell = document.createElement("td");
         const rule_description_cell = document.createElement("td");
         const a11y_requirements_cell = document.createElement("td");
@@ -233,7 +232,6 @@ function buildIssuesTHead() {
         issue_details_textarea.setAttribute("aria-labelledby",issue_details_th_ID);
         issue_details_textarea.setAttribute("readonly","");
         issue_details_textarea.setAttribute("name",issue_array[i].id);
-        issue_details_edit_save_button.setAttribute("aria-describedby",rule_description_td_ID);
 
         // Setting innerHTMLs
         if (issue_array[i].description) {
@@ -242,7 +240,6 @@ function buildIssuesTHead() {
         else {
             issue_details_textarea.innerHTML = "";
         }
-        issue_details_edit_save_button.innerHTML = "Edit Details";
 
         issue_status_cell.innerHTML = issue_array[i].status;
         issue_id_cell.innerHTML = issue_array[i].id;
@@ -273,7 +270,6 @@ function buildIssuesTHead() {
 
         // Appending elements
         issue_details_cell.appendChild(issue_details_textarea);
-        issue_details_cell.appendChild(issue_details_edit_save_button);
         issue_row.appendChild(issue_details_cell);
         issue_row.appendChild(issue_status_cell);
         issue_row.appendChild(rule_description_cell);
