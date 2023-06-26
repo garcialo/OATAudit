@@ -28,7 +28,7 @@
 * Visual Design
 * Allowing for different Audit views (table vs ...cards?)
 * I18n?
-* Explore feature creep ideas (guided audit creation, guided testing, representative/represented pages, thorough scoping tool)
+* Explore feature creep ideas (guided audit creation, guided testing, representative/represented pages, thorough scoping tool, adding recommended fixes, uploading images)
 
 ## ToDone
 * Basic HTML for Index, Audit, Rules pages
