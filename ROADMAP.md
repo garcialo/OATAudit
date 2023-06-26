@@ -22,6 +22,8 @@
 * Set proper schema with auto-incrementing indexes
 * Make repo public and move roadmap to the Wiki
 * After Public Repo - setup Github Pages
+* Set up favicon to use the svg favicon; think it's currently defaulting to the favicon.ico
+* Create a decent unfurl as a placeholder until it can be done better after visual design is done
 * Exporting/Saving
 * Loading Audit/Entire DB
 * Importing EARL formatted issues
