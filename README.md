@@ -1,15 +1,15 @@
 # OAT Audit
-Open Accessibility Testing (OAT) Audit is a web application to help you keep track of manual accessibility audits.
+Open Accessibility Testing (OAT) Audit is a web application that helps track manual accessibility audits.
 
 ## Why?
-I realized there weren't any free open-source tools to track manual accessibility auditing. I created an [accessibility testing checklist](http://checklist.garcialo.com) and then eventually a Google Sheets-based [auditing spreadsheet](http://audit.garcialo.com) to help me keep track of manual audits.
+Realized there weren't any free open-source tools to track manual accessibility auditing. I created an [accessibility testing checklist (http://checklist.garcialo.com)](http://checklist.garcialo.com) as a first step towards creating a Google Sheets-based [auditing spreadsheet (http://audit.garcialo.com)](http://audit.garcialo.com) to help me track audits.
 
-This project is essentially rebuilding the auditing spreadsheet without relying on Google Sheets.
+This project strives to recreate and eventually improve upon the auditing spreadsheet as a web app.
 
 ## Goals
-* Remain free and open source
+* Remain accessible, free, and open source
 * Have at least one regular user other than myself
 
 ## Using
-* Eleventy (11ty) static site generator
-* Dexie.js a minimalistic wrapper for IndexedDB
+* [Eleventy (https://www.11ty.dev/)](https://www.11ty.dev/) static site generator
+* [Dexie.js (https://dexie.org/)](https://dexie.org/) a minimalistic wrapper for IndexedDB
