@@ -35,6 +35,6 @@
 * IndexedDB schema created, sample data created
 * Use IndexedDB content for basic Index, Audit, Rules pages
 * Validate URL parameters for Audit for getting into the correct state
-* Table view built out for all views
+* Table view built out for all issues
 * Move entire audit table creation into JS
 * Change "issue_description" variables to "issue_details"
