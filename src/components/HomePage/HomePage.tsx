@@ -1,7 +1,7 @@
 import setPageTitle from "../../setPageTitle";
 import AuditList from "./AuditList";
 
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { useId, useState } from "react";
 import ChecklistOptions from "../FormSelectChecklist/ChecklistOptions";
 import { db } from "../../db";
@@ -9,6 +9,7 @@ import { db } from "../../db";
 export default function HomePage() {
 	setPageTitle("OAT Audit");
 	const selectID = useId();
+	const navigate = useNavigate();
 
 	// efforts to set the defaultValue of the select input have failed, so doing useState("1") as a stopgap
 	const [selectedChecklist, setSelectedChecklist] = useState("1");
@@ -58,8 +59,9 @@ export default function HomePage() {
 				issue_IDs: issue_IDs,
 			});
 			const audit_ID_number = Number(audit_ID);
-			const url = `/audit?audit_ID=${audit_ID_number}`;
-			window.history.pushState(null, "", url);
+			const url = "/audit?audit_ID=" + audit_ID_number;
+			console.log("Nav attempt: " + url);
+			navigate(url);
 		} catch (error) {
 			console.log(error);
 		}
