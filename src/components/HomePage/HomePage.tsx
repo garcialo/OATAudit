@@ -12,6 +12,7 @@ export default function HomePage() {
 	const navigate = useNavigate();
 
 	// efforts to set the defaultValue of the select input have failed, so doing useState("1") as a stopgap
+	// context, without setting an initial value, selectedChecklist would be null until the select input is changed
 	const [selectedChecklist, setSelectedChecklist] = useState("1");
 
 	const handleSelectChange = (
