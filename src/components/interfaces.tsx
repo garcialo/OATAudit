@@ -15,7 +15,7 @@ export interface IssueContent {
 // DB Interfaces
 // All indexed variables are required, but not all required values are indexed
 export interface Audit {
-	id: number;
+	id?: number;
 	name: string;
 	checklist_ID: number;
 	page_IDs: number[];
@@ -23,26 +23,26 @@ export interface Audit {
 }
 
 export interface Issues {
-	id: number;
+	id?: number;
 	rule_ID: string;
 	status: string;
 	page_state_ID: number;
 	page_ID: number;
-	issue_number: number;
+	issue_number?: number;
 	description?: string;
 }
 
 export interface Pages {
-	id: number;
+	id?: number;
 	name: string;
 	page_state_IDs: number[];
 	url: string;
 }
 
 export interface Page_states {
-	id: number;
+	id?: number;
 	name: string;
-	page_ID: number;
+	page_ID?: number;
 	instructions?: string;
 }
 
@@ -57,7 +57,7 @@ export interface Rules {
 	rule_ID: string; // maps to ACT Issue ID
 	name: string;
 	description: string;
-	accessibility_requirements: string[];
+	accessibility_requirements?: string[];
 	//rule_type
 	//input_aspects
 	//input_rules

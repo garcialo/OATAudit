@@ -19,12 +19,12 @@ export class AuditDB extends Dexie {
 	constructor() {
 		super("OAT Audit");
 		this.version(1).stores({
-			audits: "id,name,checklist_ID,*page_IDs,*issue_IDs",
-			issues: "id,rule_ID,status,page_state_ID,page_ID",
-			pages: "id,name,*page_state_IDs",
-			page_states: "id,name,page_ID",
-			checklists: "id,&name,*rule_IDs",
-			rules: "id,rule_ID,rule_name,*accessibility_requirements",
+			audits: "++id,name,checklist_ID,*page_IDs,*issue_IDs",
+			issues: "++id,rule_ID,status,page_state_ID,page_ID",
+			pages: "++id,name,*page_state_IDs",
+			page_states: "++id,name,page_ID",
+			checklists: "++id,&name,*rule_IDs",
+			rules: "++id,rule_ID,rule_name,*accessibility_requirements",
 		});
 	}
 }
@@ -55,6 +55,7 @@ db.on("populate", async () => {
 			rule_IDs: ["log-1000", "log-1001"],
 			name: "Two rule checklist",
 		},
+		{ id: 1, rule_IDs: ["log-1001"], name: "Only 1001 - default" },
 	]);
 
 	db.issues.bulkPut([
