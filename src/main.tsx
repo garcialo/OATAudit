@@ -5,7 +5,7 @@ import "./index.css";
 
 import Header from "./components/Header.tsx";
 import ErrorPage from "./components/ErrorPage.tsx";
-import HomeMain from "./components/HomePage/HomePage.tsx";
+import HomePage from "./components/HomePage/HomePage.tsx";
 import RulesPage, { rulesLoader } from "./components/RulesPage/RulesPage.tsx";
 import AuditPage, { auditLoader } from "./components/AuditPage/AuditPage.tsx";
 import AuditSettingsPage, {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
-				element: <HomeMain />,
+				element: <HomePage />,
 			},
 			{
 				path: "/rules",
