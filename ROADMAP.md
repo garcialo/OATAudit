@@ -20,14 +20,12 @@
 -   Basic rule creation
 -   ACT rule creation
 -   Removing custom rules/checklists/checking if custom rule used by checklist/checklist used by audits
--   Move to Dexie.on.populate for initial db setup
--   Set proper schema with auto-incrementing indexes
 -   Make repo public and move roadmap to the Wiki
 -   After Public Repo - setup Github Pages
 -   Set up favicon to use the svg favicon; think it's currently defaulting to the favicon.ico
 -   Create a decent unfurl as a placeholder until it can be done better after visual design is done
 -   Exporting/Saving
--   Loading Audit/Entire DB
+-   Loading Audit/Entire DB from uploaded file
 -   Importing EARL formatted issues
 -   Visual Design
 -   Allowing for different Audit views (table vs ...cards?)
@@ -42,3 +40,5 @@
 -   Use IndexedDB sample data for basic Index, Audit, Rules pages
 -   Table view built out for "All Issues"
 -   Add "Issue Number" to the DB schema and audit table
+-   Move to Dexie.on.populate for initial db setup
+-   Set proper schema with auto-incrementing indexes
