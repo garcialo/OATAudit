@@ -10,10 +10,11 @@ This project strives to recreate and eventually improve upon the auditing spread
 
 ## Goals
 
--   Strive to be fuly accessible
--   Remain WCAG conformant, free, and open source
+-   Striving to be fuly accessible
+-   Remaining free and open-source
 
-## Using
+## Built with
 
--   [React (https://www.react.dev/)](https://www.react.dev/)
 -   [Dexie.js (https://dexie.org/)](https://dexie.org/) a minimalistic wrapper for IndexedDB
+-   [React (https://www.react.dev/)](https://www.react.dev/)
+-   [TypeScript (https://www.typescriptlang.org/)](https://www.typescriptlang.org/)
