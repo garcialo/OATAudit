@@ -22,14 +22,12 @@ export default function AuditSettingsPage() {
 
 	const [new_audit_name, setNewAuditName] = useState("");
 
-	// Begin audit.name input event handling
+	// audit.name input event handling
 	const handleAuditNameChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		setNewAuditName(event.target.value);
 	};
-
-	// End audit.name input event handling
 
 	// current_audit is used throughout the return and may be null
 	if (!current_audit) {
