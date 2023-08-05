@@ -35,13 +35,6 @@ export default function useJoinedAudit(audit_ID: number) {
 
 		joined_audit.pages = [];
 
-		/*
-id?: number;
-	name: string;
-	page_state_IDs: number[];
-	url: string;
-*/
-
 		for (const page of pages) {
 			const joined_page: JoinedPage = {} as JoinedPage;
 			joined_page.id = page.id;
@@ -49,8 +42,8 @@ id?: number;
 			joined_page.url = page.url;
 
 			const page_states = await db.page_states
-				.where("page_ID")
-				.equals(page.id)
+				.where("id")
+				.anyOf(page.page_state_IDs)
 				.toArray();
 
 			joined_page.page_states = page_states;
