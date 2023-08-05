@@ -63,6 +63,20 @@ export default function AuditSettingsPage() {
 				/>
 				<input type="submit" value="Update audit name" />
 			</Form>
+			{current_audit.pages.map((page) => (
+				<>
+					<p>Page ID {page.id}</p>
+					<p>Page Name {page.name}</p>
+					<p>Page URL {page.url}</p>
+					{page.page_states.map((page_state) => (
+						<>
+							<p>State ID {page_state.id}</p>
+							<p>State Name {page_state.name}</p>
+							<p>State Instructions {page_state.instructions}</p>
+						</>
+					))}
+				</>
+			))}
 		</main>
 	);
 }
