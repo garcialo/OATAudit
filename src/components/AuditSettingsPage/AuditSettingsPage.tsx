@@ -27,7 +27,6 @@ export default function AuditSettingsPage() {
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		setNewAuditName(event.target.value);
-		console.log("Audit Name Changed " + event.target.value);
 	};
 
 	// End audit.name input event handling
@@ -41,7 +40,6 @@ export default function AuditSettingsPage() {
 
 	const saveAuditName = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log(new_audit_name);
 
 		try {
 			await db.audits.update(current_audit.id, { name: new_audit_name });
