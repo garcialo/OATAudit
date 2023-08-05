@@ -1,6 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useId, useState } from "react";
-import { Form, type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+	Form,
+	type LoaderFunctionArgs,
+	useLoaderData,
+	Link,
+} from "react-router-dom";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
 import { db } from "../../db";
@@ -50,7 +55,13 @@ export default function AuditSettingsPage() {
 
 	return (
 		<main>
-			<h1>Audit Settings: {current_audit.name}</h1>
+			<h1>
+				Audit Settings:{" "}
+				<Link to={"/audit?audit_ID=" + current_audit.id}>
+					{current_audit.name}
+				</Link>
+			</h1>
+
 			<Form onSubmit={saveAuditName}>
 				<h2>Audit Name</h2>
 				<p>Current Audit Name: {current_audit.name}</p>
