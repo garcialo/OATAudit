@@ -51,7 +51,7 @@ id?: number;
 			const page_states = await db.page_states
 				.where("page_ID")
 				.equals(page.id)
-				.first();
+				.toArray();
 
 			joined_page.page_states = page_states;
 
