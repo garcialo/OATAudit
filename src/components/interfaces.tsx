@@ -1,6 +1,8 @@
-// AuditPage Interfaces
+// Joined Interfaces
 export interface JoinedAudit {
-	audit: Audit;
+	id: number;
+	name: string;
+	//audit: Audit;
 	checklist: Checklists;
 	issues: IssueContent[];
 }
