@@ -97,12 +97,17 @@ export default function AuditSettingsPage() {
 function PageSettings({ page }: { page: JoinedPage }) {
 	const label_update_page_name = useId();
 	const label_update_page_url = useId();
+	const label_new_page_state_name = useId();
+	const label_new_page_state_instructions = useId();
 
 	const original_name = page.name;
 	const original_url = page.url;
 
 	const [name, setName] = useState(original_name);
 	const [url, setUrl] = useState(original_url);
+	const [new_page_state_name, setNewPageStateName] = useState("");
+	const [new_page_state_instructions, setNewPageStateInstructions] =
+		useState("");
 
 	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
@@ -110,6 +115,18 @@ function PageSettings({ page }: { page: JoinedPage }) {
 
 	const handleUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setUrl(event.target.value);
+	};
+
+	const handleNewPageStateName = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setNewPageStateName(event.target.value);
+	};
+
+	const handleNewPageStateInstructions = (
+		event: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setNewPageStateInstructions(event.target.value);
 	};
 
 	async function handleUpdatePage(
@@ -122,6 +139,18 @@ function PageSettings({ page }: { page: JoinedPage }) {
 				name: name,
 				url: url,
 			});
+		} catch (error) {
+			console.log("Failed to update page: " + name + "::" + error);
+		}
+	}
+
+	async function handleNewPageState(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			console.log("New State");
 		} catch (error) {
 			console.log("Failed to create page state: " + name + "::" + error);
 		}
@@ -160,6 +189,31 @@ function PageSettings({ page }: { page: JoinedPage }) {
 			{page.page_states.map((page_state) => (
 				<PageStateSettings page_state={page_state} />
 			))}
+
+			<Form onSubmit={handleNewPageState}>
+				<fieldset>
+					<legend>Add Page State to {page.name}</legend>
+					<label htmlFor={label_new_page_state_name}>
+						Page State Name:{" "}
+					</label>
+					<br />
+					<input
+						id={label_new_page_state_name}
+						value={new_page_state_name}
+						onChange={handleNewPageStateName}
+					/>
+					<br />
+					<label htmlFor={label_new_page_state_instructions}>
+						Page State Instructions:{" "}
+					</label>
+					<br />
+					<textarea
+						id={label_new_page_state_instructions}
+						onChange={handleNewPageStateInstructions}
+					/>
+					<input type="submit" value={"Create page state"} />
+				</fieldset>
+			</Form>
 		</>
 	);
 }
