@@ -38,8 +38,10 @@ export default function HomePage() {
 				url: "example.com",
 			});
 			const page_ID_number = Number(page_ID);
-			// revisiting the page_state now that we have a page_ID
-			if (page_state) page_state.page_ID = page_ID_number;
+			// revisiting the page_state now that we have a page_ID for the foreign key
+			await db.page_states.update(page_state.id, {
+				page_ID: page_ID_number,
+			});
 
 			const db_checklist = await db.checklists.get(checklist_ID);
 			const issue_IDs: number[] = [];
