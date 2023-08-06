@@ -94,24 +94,6 @@ export default function AuditSettingsPage() {
 }
 
 function PageSettings({ page }: { page: JoinedPage }) {
-	async function handleUpdatePageState(
-		page_state_ID: number,
-		name: string,
-		instructions: string,
-		event: React.FormEvent<HTMLFormElement>
-	): Promise<void> {
-		event.preventDefault();
-
-		try {
-			await db.page_states.update(page_state_ID, {
-				name: name,
-				instructions: instructions,
-			});
-		} catch (error) {
-			console.log("Failed to create page state: " + name + "::" + error);
-		}
-	}
-
 	return (
 		<>
 			<p>===START PAGE===</p>
@@ -119,28 +101,14 @@ function PageSettings({ page }: { page: JoinedPage }) {
 			<p>= Page Name {page.name}</p>
 			<p>= Page URL {page.url}</p>
 			{page.page_states.map((page_state) => (
-				<PageStateSettings
-					page_state={page_state}
-					onUpdatePageState={handleUpdatePageState}
-				/>
+				<PageStateSettings page_state={page_state} />
 			))}
 			<p>===END PAGE===</p>
 		</>
 	);
 }
 
-function PageStateSettings({
-	page_state,
-	onUpdatePageState,
-}: {
-	page_state: Page_state;
-	onUpdatePageState: (
-		page_state_ID: number,
-		name: string,
-		instructions: string,
-		event: React.FormEvent<HTMLFormElement>
-	) => void;
-}) {
+function PageStateSettings({ page_state }: { page_state: Page_state }) {
 	const label_update_page_state_name = useId();
 	const label_update_page_state_instructions = useId();
 
@@ -164,24 +132,30 @@ function PageStateSettings({
 		setInstructions(event.target.value);
 	};
 
+	async function handleUpdatePageState(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			await db.page_states.update(page_state.id, {
+				name: name,
+				instructions: instructions,
+			});
+		} catch (error) {
+			console.log("Failed to create page state: " + name + "::" + error);
+		}
+	}
+
 	return (
-		<Form
-			onSubmit={(event) =>
-				onUpdatePageState(
-					Number(page_state.id),
-					name,
-					instructions,
-					event
-				)
-			}
-		>
+		<Form onSubmit={(event) => handleUpdatePageState(event)}>
 			<fieldset>
 				<legend>
 					{page_state.name} (id={page_state.id})
 				</legend>
 				<label htmlFor={label_update_page_state_name}>
 					Page State Name:{" "}
-					{original_name != name ? "**Updated** " : null}
+					{original_name != name ? <Updated /> : null}
 				</label>
 				<br />
 				<input
@@ -192,9 +166,7 @@ function PageStateSettings({
 				<br />
 				<label htmlFor={label_update_page_state_instructions}>
 					Page State Instructions:{" "}
-					{original_instructions != instructions
-						? "**Updated** "
-						: null}
+					{original_instructions != instructions ? <Updated /> : null}
 				</label>
 				<br />
 				<textarea
@@ -208,4 +180,6 @@ function PageStateSettings({
 	);
 }
 
-/* Luis, please fix this mess. Thanks, Luis*/
+function Updated() {
+	return <>**Updated** </>;
+}
