@@ -9,7 +9,7 @@ import {
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
 import { db } from "../../db";
-import { JoinedPage, Page_state } from "../interfaces";
+import { JoinedPage, Page, Page_state } from "../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
@@ -150,7 +150,20 @@ function PageSettings({ page }: { page: JoinedPage }) {
 		event.preventDefault();
 
 		try {
-			console.log("New State");
+			const new_page_state_ID = await db.page_states.add({
+				name: new_page_state_name,
+				page_ID: page.id,
+				instructions: new_page_state_instructions,
+			});
+
+			const new_page_state_ID_number = Number(new_page_state_ID);
+
+			await db.pages
+				.where("id")
+				.equals(page.id)
+				.modify((this_page: Page) =>
+					this_page.page_state_IDs.push(new_page_state_ID_number)
+				);
 		} catch (error) {
 			console.log("Failed to create page state: " + name + "::" + error);
 		}
@@ -199,7 +212,6 @@ function PageSettings({ page }: { page: JoinedPage }) {
 					<br />
 					<input
 						id={label_new_page_state_name}
-						value={new_page_state_name}
 						onChange={handleNewPageStateName}
 					/>
 					<br />
