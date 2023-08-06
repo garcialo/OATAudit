@@ -94,15 +94,22 @@ export default function AuditSettingsPage() {
 }
 
 function PageSettings({ page }: { page: JoinedPage }) {
-	const handleAddPageState = (name: string, instructions: string) => {
-		console.log(
-			"Handling adding page state " +
-				name +
-				" to " +
-				page.name +
-				" with instructions: " +
-				instructions
-		);
+	const handleUpdatePageState = async (
+		page_state_ID: number,
+		name: string,
+		instructions: string,
+		event: React.FormEvent<HTMLFormElement>
+	) => {
+		event.preventDefault();
+
+		try {
+			await db.page_states.update(page_state_ID, {
+				name: name,
+				instructions: instructions,
+			});
+		} catch (error) {
+			console.log("Failed to create page state: " + name + "::" + error);
+		}
 	};
 
 	return (
@@ -114,7 +121,7 @@ function PageSettings({ page }: { page: JoinedPage }) {
 			{page.page_states.map((page_state) => (
 				<PageStateSettings
 					page_state={page_state}
-					onUpdatePageState={handleAddPageState}
+					onUpdatePageState={handleUpdatePageState}
 				/>
 			))}
 			<p>===END PAGE===</p>
@@ -127,7 +134,12 @@ function PageStateSettings({
 	onUpdatePageState,
 }: {
 	page_state: Page_state;
-	onUpdatePageState: (name: string, instructions: string) => void;
+	onUpdatePageState: (
+		page_state_ID: number,
+		name: string,
+		instructions: string,
+		event: React.FormEvent<HTMLFormElement>
+	) => void;
 }) {
 	const label_update_page_state_name = useId();
 	const label_update_page_state_instructions = useId();
@@ -152,56 +164,46 @@ function PageStateSettings({
 		setInstructions(event.target.value);
 	};
 
-	const savePageState = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-		try {
-			//await db.audits.update(current_audit.id, { name: new_audit_name });
-			console.log(
-				"Update DB with new Page State " +
-					name +
-					" and instructions: " +
-					instructions
-			);
-		} catch (error) {
-			console.log("Failed to create page state: " + name + "::" + error);
-		}
-	};
-
 	return (
-		<fieldset>
-			<legend>
-				{page_state.name} :: id:{page_state.id}
-			</legend>
-			<label htmlFor={label_update_page_state_name}>
-				Page State Name: {original_name != name ? "**Updated** " : null}
-			</label>
-			<br />
-			<input
-				id={label_update_page_state_name}
-				value={name}
-				onChange={handleName}
-			/>
-			<br />
-			<label htmlFor={label_update_page_state_instructions}>
-				Page State Instructions:{" "}
-				{original_instructions != instructions ? "**Updated** " : null}
-			</label>
-			<br />
-			<textarea
-				id={label_update_page_state_instructions}
-				value={instructions}
-				onChange={handleInstructions}
-			/>
-			<br />
-			<input
-				type="submit"
-				onClick={() => {
-					setName("");
-					onUpdatePageState(name, instructions);
-				}}
-				value={"Update page state"}
-			/>
-		</fieldset>
+		<Form
+			onSubmit={(event) =>
+				onUpdatePageState(
+					Number(page_state.id),
+					name,
+					instructions,
+					event
+				)
+			}
+		>
+			<fieldset>
+				<legend>
+					{page_state.name} (id={page_state.id})
+				</legend>
+				<label htmlFor={label_update_page_state_name}>
+					Page State Name:{" "}
+					{original_name != name ? "**Updated** " : null}
+				</label>
+				<br />
+				<input
+					id={label_update_page_state_name}
+					value={name}
+					onChange={handleName}
+				/>
+				<br />
+				<label htmlFor={label_update_page_state_instructions}>
+					Page State Instructions:{" "}
+					{original_instructions != instructions
+						? "**Updated** "
+						: null}
+				</label>
+				<br />
+				<textarea
+					id={label_update_page_state_instructions}
+					value={instructions}
+					onChange={handleInstructions}
+				/>
+				<input type="submit" value={"Update page state"} />
+			</fieldset>
+		</Form>
 	);
 }
