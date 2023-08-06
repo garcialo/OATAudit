@@ -94,8 +94,15 @@ export default function AuditSettingsPage() {
 }
 
 function PageSettings({ page }: { page: JoinedPage }) {
-	const handleAddPageState = (name: string) => {
-		console.log("Handling adding page state " + name + " to " + page.name);
+	const handleAddPageState = (name: string, instructions: string) => {
+		console.log(
+			"Handling adding page state " +
+				name +
+				" to " +
+				page.name +
+				" with instructions: " +
+				instructions
+		);
 	};
 
 	return (
@@ -120,23 +127,37 @@ function PageStateSettings({
 	onAddPageState,
 }: {
 	page_state: Page_state;
-	onAddPageState: (name: string) => void;
+	onAddPageState: (name: string, instructions: string) => void;
 }) {
 	const label_new_page_state_name = useId();
+	const label_new_page_state_instructions = useId();
+
 	const [name, setName] = useState("");
+	const [instructions, setInstructions] = useState("");
 
 	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
 
-	const saveName = async (event: React.FormEvent<HTMLFormElement>) => {
+	const handleInstructions = (
+		event: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setInstructions(event.target.value);
+	};
+
+	const savePageState = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
 		try {
 			//await db.audits.update(current_audit.id, { name: new_audit_name });
-			console.log("Update DB with new Page Settings name");
+			console.log(
+				"Update DB with new Page State " +
+					name +
+					" and instructions: " +
+					instructions
+			);
 		} catch (error) {
-			console.log("Failed to rename audit: " + " " + "::" + error);
+			console.log("Failed to create page state: " + name + "::" + error);
 		}
 	};
 
@@ -155,13 +176,23 @@ function PageStateSettings({
 				value={name}
 				onChange={handleName}
 			/>
+
+			<label htmlFor={label_new_page_state_instructions}>
+				New Page State Instructions:{" "}
+			</label>
+			<textarea
+				id={label_new_page_state_instructions}
+				value={instructions}
+				onChange={handleInstructions}
+			/>
+
 			<input
 				type="submit"
 				onClick={() => {
 					setName("");
-					onAddPageState(name);
+					onAddPageState(name, instructions);
 				}}
-				value={"Add page"}
+				value={"Add page state"}
 			/>
 
 			<p>===END PAGE STATE===</p>
