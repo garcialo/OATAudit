@@ -94,12 +94,12 @@ export default function AuditSettingsPage() {
 }
 
 function PageSettings({ page }: { page: JoinedPage }) {
-	const handleUpdatePageState = async (
+	async function handleUpdatePageState(
 		page_state_ID: number,
 		name: string,
 		instructions: string,
 		event: React.FormEvent<HTMLFormElement>
-	) => {
+	): Promise<void> {
 		event.preventDefault();
 
 		try {
@@ -110,7 +110,7 @@ function PageSettings({ page }: { page: JoinedPage }) {
 		} catch (error) {
 			console.log("Failed to create page state: " + name + "::" + error);
 		}
-	};
+	}
 
 	return (
 		<>
