@@ -1,20 +1,20 @@
 import Dexie, { Table } from "dexie";
 import {
 	Audit,
-	Issues,
-	Pages,
-	Page_states,
-	Checklists,
-	Rules,
+	Issue,
+	Page,
+	Page_state,
+	Checklist,
+	Rule,
 } from "./components/interfaces";
 
 export class AuditDB extends Dexie {
 	audits!: Table<Audit>;
-	issues!: Table<Issues>;
-	pages!: Table<Pages>;
-	page_states!: Table<Page_states>;
-	checklists!: Table<Checklists>;
-	rules!: Table<Rules>;
+	issues!: Table<Issue>;
+	pages!: Table<Page>;
+	page_states!: Table<Page_state>;
+	checklists!: Table<Checklist>;
+	rules!: Table<Rule>;
 
 	constructor() {
 		super("OAT Audit");
