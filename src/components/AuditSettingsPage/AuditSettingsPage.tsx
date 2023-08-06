@@ -65,6 +65,7 @@ export default function AuditSettingsPage() {
 					{current_audit.name}
 				</Link>
 			</h1>
+			<p>Checklist: {current_audit.checklist.name} (can't be changed)</p>
 
 			<section aria-labelledby={label_name_section}>
 				<h2 id={label_name_section}>Audit Name</h2>
