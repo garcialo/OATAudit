@@ -66,8 +66,8 @@ export default function AuditSettingsPage() {
 				</Link>
 			</h1>
 
-			<h2 id={label_name_section}>Audit Name</h2>
 			<section aria-labelledby={label_name_section}>
+				<h2 id={label_name_section}>Audit Name</h2>
 				<Form onSubmit={saveAuditName}>
 					<p>Current Audit Name: {current_audit.name}</p>
 					<label htmlFor={label_id_audit_name}>
@@ -83,8 +83,8 @@ export default function AuditSettingsPage() {
 				</Form>
 			</section>
 
-			<h2 id={label_scope_section}>Audit Scope</h2>
 			<section aria-labelledby={label_scope_section}>
+				<h2 id={label_scope_section}>Audit Scope</h2>
 				{current_audit.pages.map((page) => (
 					<PageSettings page={page} />
 				))}
@@ -114,7 +114,7 @@ function PageSettings({ page }: { page: JoinedPage }) {
 			{page.page_states.map((page_state) => (
 				<PageStateSettings
 					page_state={page_state}
-					onAddPageState={handleAddPageState}
+					onUpdatePageState={handleAddPageState}
 				/>
 			))}
 			<p>===END PAGE===</p>
@@ -124,16 +124,23 @@ function PageSettings({ page }: { page: JoinedPage }) {
 
 function PageStateSettings({
 	page_state,
-	onAddPageState,
+	onUpdatePageState,
 }: {
 	page_state: Page_state;
-	onAddPageState: (name: string, instructions: string) => void;
+	onUpdatePageState: (name: string, instructions: string) => void;
 }) {
-	const label_new_page_state_name = useId();
-	const label_new_page_state_instructions = useId();
+	const label_update_page_state_name = useId();
+	const label_update_page_state_instructions = useId();
 
-	const [name, setName] = useState("");
-	const [instructions, setInstructions] = useState("");
+	const original_name = page_state.name;
+
+	let original_instructions = " ";
+	if (page_state.instructions) {
+		original_instructions = page_state.instructions;
+	}
+
+	const [name, setName] = useState(original_name);
+	const [instructions, setInstructions] = useState(original_instructions);
 
 	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
@@ -162,40 +169,39 @@ function PageStateSettings({
 	};
 
 	return (
-		<>
-			<p>===START PAGE STATE===</p>
-			<p>= = State ID {page_state.id}</p>
-			<p>= = State Name {page_state.name}</p>
-			<p>= = State Instructions {page_state.instructions}</p>
-
-			<label htmlFor={label_new_page_state_name}>
-				New Page State Name:{" "}
+		<fieldset>
+			<legend>
+				{page_state.name} :: id:{page_state.id}
+			</legend>
+			<label htmlFor={label_update_page_state_name}>
+				Page State Name: {original_name != name ? "**Updated** " : null}
 			</label>
+			<br />
 			<input
-				id={label_new_page_state_name}
+				id={label_update_page_state_name}
 				value={name}
 				onChange={handleName}
 			/>
-
-			<label htmlFor={label_new_page_state_instructions}>
-				New Page State Instructions:{" "}
+			<br />
+			<label htmlFor={label_update_page_state_instructions}>
+				Page State Instructions:{" "}
+				{original_instructions != instructions ? "**Updated** " : null}
 			</label>
+			<br />
 			<textarea
-				id={label_new_page_state_instructions}
+				id={label_update_page_state_instructions}
 				value={instructions}
 				onChange={handleInstructions}
 			/>
-
+			<br />
 			<input
 				type="submit"
 				onClick={() => {
 					setName("");
-					onAddPageState(name, instructions);
+					onUpdatePageState(name, instructions);
 				}}
-				value={"Add page state"}
+				value={"Update page state"}
 			/>
-
-			<p>===END PAGE STATE===</p>
-		</>
+		</fieldset>
 	);
 }
