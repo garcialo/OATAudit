@@ -9,6 +9,7 @@ import {
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
 import { db } from "../../db";
+import { JoinedPage, Page_state } from "../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
@@ -23,6 +24,9 @@ export default function AuditSettingsPage() {
 	};
 
 	const label_id_audit_name = useId();
+	const label_name_section = useId();
+	const label_scope_section = useId();
+
 	const current_audit = useJoinedAudit(given_audit_ID);
 
 	const [new_audit_name, setNewAuditName] = useState("");
@@ -62,32 +66,105 @@ export default function AuditSettingsPage() {
 				</Link>
 			</h1>
 
-			<Form onSubmit={saveAuditName}>
-				<h2>Audit Name</h2>
-				<p>Current Audit Name: {current_audit.name}</p>
-				<label htmlFor={label_id_audit_name}>New Audit Name: </label>
-				<input
-					type="text"
-					id={label_id_audit_name}
-					value={new_audit_name}
-					onChange={handleAuditNameChange}
-				/>
-				<input type="submit" value="Update audit name" />
-			</Form>
-			{current_audit.pages.map((page) => (
-				<>
-					<p>Page ID {page.id}</p>
-					<p>Page Name {page.name}</p>
-					<p>Page URL {page.url}</p>
-					{page.page_states.map((page_state) => (
-						<>
-							<p>State ID {page_state.id}</p>
-							<p>State Name {page_state.name}</p>
-							<p>State Instructions {page_state.instructions}</p>
-						</>
-					))}
-				</>
-			))}
+			<h2 id={label_name_section}>Audit Name</h2>
+			<section aria-labelledby={label_name_section}>
+				<Form onSubmit={saveAuditName}>
+					<p>Current Audit Name: {current_audit.name}</p>
+					<label htmlFor={label_id_audit_name}>
+						New Audit Name:{" "}
+					</label>
+					<input
+						type="text"
+						id={label_id_audit_name}
+						value={new_audit_name}
+						onChange={handleAuditNameChange}
+					/>
+					<input type="submit" value="Update audit name" />
+				</Form>
+			</section>
+
+			<h2 id={label_scope_section}>Audit Scope</h2>
+			<section aria-labelledby={label_scope_section}>
+				{current_audit.pages.map((page) => (
+					<PageSettings page={page} />
+				))}
+			</section>
 		</main>
+	);
+}
+
+function PageSettings({ page }: { page: JoinedPage }) {
+	const handleAddPageState = (name: string) => {
+		console.log("Handling adding page state " + name + " to " + page.name);
+	};
+
+	return (
+		<>
+			<p>===START PAGE===</p>
+			<p>= Page ID {page.id}</p>
+			<p>= Page Name {page.name}</p>
+			<p>= Page URL {page.url}</p>
+			{page.page_states.map((page_state) => (
+				<PageStateSettings
+					page_state={page_state}
+					onAddPageState={handleAddPageState}
+				/>
+			))}
+			<p>===END PAGE===</p>
+		</>
+	);
+}
+
+function PageStateSettings({
+	page_state,
+	onAddPageState,
+}: {
+	page_state: Page_state;
+	onAddPageState: (name: string) => void;
+}) {
+	const label_new_page_state_name = useId();
+	const [name, setName] = useState("");
+
+	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setName(event.target.value);
+	};
+
+	const saveName = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		try {
+			//await db.audits.update(current_audit.id, { name: new_audit_name });
+			console.log("Update DB with new Page Settings name");
+		} catch (error) {
+			console.log("Failed to rename audit: " + " " + "::" + error);
+		}
+	};
+
+	return (
+		<>
+			<p>===START PAGE STATE===</p>
+			<p>= = State ID {page_state.id}</p>
+			<p>= = State Name {page_state.name}</p>
+			<p>= = State Instructions {page_state.instructions}</p>
+
+			<label htmlFor={label_new_page_state_name}>
+				New Page State Name:{" "}
+			</label>
+			<input
+				id={label_new_page_state_name}
+				value={name}
+				onChange={handleName}
+			/>
+			<input
+				type="submit"
+				onClick={() => {
+					setName("");
+					onAddPageState(name);
+				}}
+				value={"Add page"}
+			/>
+
+			<p>===END PAGE STATE===</p>
+		</>
 	);
 }
