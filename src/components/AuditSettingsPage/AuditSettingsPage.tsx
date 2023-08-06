@@ -1,7 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
-import setPageTitle from "../../setPageTitle";
-import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { useId, useState } from "react";
+import {
+	Form,
+	type LoaderFunctionArgs,
+	useLoaderData,
+	Link,
+} from "react-router-dom";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
+import setPageTitle from "../../setPageTitle";
+import { db } from "../../db";
+import { JoinedPage, Page_state } from "../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
@@ -11,61 +19,222 @@ export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 }
 
 export default function AuditSettingsPage() {
-	setPageTitle("Audit Settings - OAT Audit");
-
 	const { given_audit_ID } = useLoaderData() as {
 		given_audit_ID: number;
 	};
 
+	const label_id_audit_name = useId();
+	const label_name_section = useId();
+	const label_scope_section = useId();
+
 	const current_audit = useJoinedAudit(given_audit_ID);
 
+	const [new_audit_name, setNewAuditName] = useState("");
+
+	// audit.name input event handling
+	const handleAuditNameChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setNewAuditName(event.target.value);
+	};
+
+	// current_audit is used throughout the return and may be null
 	if (!current_audit) {
 		return null;
 	} else {
-		setPageTitle(
-			"Audit Settings: " + current_audit.audit.name + " - OAT Audit"
-		);
+		setPageTitle("Audit Settings: " + current_audit.name + " - OAT Audit");
+	}
+
+	const saveAuditName = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		try {
+			await db.audits.update(current_audit.id, { name: new_audit_name });
+		} catch (error) {
+			console.log(
+				"Failed to rename audit: " + current_audit.id + "::" + error
+			);
+		}
+	};
+
+	return (
+		<main>
+			<h1>
+				Audit Settings:{" "}
+				<Link to={"/audit?audit_ID=" + current_audit.id}>
+					{current_audit.name}
+				</Link>
+			</h1>
+
+			<section aria-labelledby={label_name_section}>
+				<h2 id={label_name_section}>Audit Name</h2>
+				<Form onSubmit={saveAuditName}>
+					<p>Current Audit Name: {current_audit.name}</p>
+					<label htmlFor={label_id_audit_name}>
+						New Audit Name:{" "}
+					</label>
+					<input
+						type="text"
+						id={label_id_audit_name}
+						value={new_audit_name}
+						onChange={handleAuditNameChange}
+					/>
+					<input type="submit" value="Update audit name" />
+				</Form>
+			</section>
+
+			<section aria-labelledby={label_scope_section}>
+				<h2 id={label_scope_section}>Audit Scope</h2>
+				{current_audit.pages.map((page) => (
+					<PageSettings page={page} />
+				))}
+			</section>
+		</main>
+	);
+}
+
+function PageSettings({ page }: { page: JoinedPage }) {
+	const label_update_page_name = useId();
+	const label_update_page_url = useId();
+
+	const original_name = page.name;
+	const original_url = page.url;
+
+	const [name, setName] = useState(original_name);
+	const [url, setUrl] = useState(original_url);
+
+	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setName(event.target.value);
+	};
+
+	const handleUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setUrl(event.target.value);
+	};
+
+	async function handleUpdatePage(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			await db.pages.update(page.id, {
+				name: name,
+				url: url,
+			});
+		} catch (error) {
+			console.log("Failed to create page state: " + name + "::" + error);
+		}
 	}
 
 	return (
 		<>
-			<main>
-				<h1>Audit Settings: {current_audit.audit.name}</h1>
-				<h2>Audit Name</h2>
-				<p>Current: {current_audit.audit.name}</p>
-				<label>New Audit Name:</label>
-				<input type="text" />
-				<input type="submit" value="Update Audit Name" />
+			<Form onSubmit={handleUpdatePage}>
+				<fieldset>
+					<legend>
+						Page: {page.name} (id:{page.id})
+					</legend>
+					<label htmlFor={label_update_page_name}>
+						Page Name: {original_name != name ? <Updated /> : null}
+					</label>
+					<br />
+					<input
+						id={label_update_page_name}
+						value={name}
+						onChange={handleName}
+					/>
+					<br />
+					<label htmlFor={label_update_page_url}>
+						Page URL: {original_url != url ? <Updated /> : null}
+					</label>
+					<br />
+					<input
+						id={label_update_page_url}
+						value={url}
+						onChange={handleUrl}
+					/>
+					<input type="submit" value={"Update page"} />
+				</fieldset>
+			</Form>
 
-				<h2>Audit Scope</h2>
-				<section>
-					<h3>Home Page</h3>
-					<button>Edit Home Page</button>
-					<p>url: http://example.com</p>
-					<h4>Page States: Home Page</h4>
-					<fieldset>
-						<legend>Initial</legend>
-						<p>Instructions: Close the "sign up" pop up.</p>
-					</fieldset>
-				</section>
-
-				<section>
-					<h3>Editing Home Page</h3>
-					<button>Save Home Page</button>
-					<p>url: http://example.com</p>
-					<label>New url:</label>
-					<input type="text" />
-					<h4>Page States: Home Page</h4>
-					<fieldset>
-						<legend>Initial</legend>
-						<label>New Page State Name</label>
-						<input type="text" />
-						<label>Instructions:</label>
-						<textarea></textarea>
-						<button>Save Home Page</button>
-					</fieldset>
-				</section>
-			</main>
+			{page.page_states.map((page_state) => (
+				<PageStateSettings page_state={page_state} />
+			))}
 		</>
 	);
+}
+
+function PageStateSettings({ page_state }: { page_state: Page_state }) {
+	const label_update_page_state_name = useId();
+	const label_update_page_state_instructions = useId();
+
+	const original_name = page_state.name;
+
+	let original_instructions = "";
+	if (page_state.instructions) {
+		original_instructions = page_state.instructions;
+	}
+
+	const [name, setName] = useState(original_name);
+	const [instructions, setInstructions] = useState(original_instructions);
+
+	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setName(event.target.value);
+	};
+
+	const handleInstructions = (
+		event: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setInstructions(event.target.value);
+	};
+
+	async function handleUpdatePageState(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			await db.page_states.update(page_state.id, {
+				name: name,
+				instructions: instructions,
+			});
+		} catch (error) {
+			console.log("Failed to update page state: " + name + "::" + error);
+		}
+	}
+
+	return (
+		<Form onSubmit={handleUpdatePageState}>
+			<fieldset>
+				<legend>
+					Page State: {page_state.name} (id={page_state.id})
+				</legend>
+				<label htmlFor={label_update_page_state_name}>
+					Page State Name:{" "}
+					{original_name != name ? <Updated /> : null}
+				</label>
+				<br />
+				<input
+					id={label_update_page_state_name}
+					value={name}
+					onChange={handleName}
+				/>
+				<br />
+				<label htmlFor={label_update_page_state_instructions}>
+					Page State Instructions:{" "}
+					{original_instructions != instructions ? <Updated /> : null}
+				</label>
+				<br />
+				<textarea
+					id={label_update_page_state_instructions}
+					value={instructions}
+					onChange={handleInstructions}
+				/>
+				<input type="submit" value={"Update page state"} />
+			</fieldset>
+		</Form>
+	);
+}
+
+function Updated() {
+	return <>**Updated** </>;
 }

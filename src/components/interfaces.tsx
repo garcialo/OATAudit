@@ -1,19 +1,28 @@
-// AuditPage Interfaces
+// Joined Interfaces
 export interface JoinedAudit {
-	audit: Audit;
-	checklist: Checklists;
+	id: number;
+	name: string;
+	//audit: Audit;
+	checklist: Checklist;
+	pages: JoinedPage[];
 	issues: IssueContent[];
 }
 
+export interface JoinedPage {
+	id: number;
+	name: string;
+	url: string;
+	page_states: Page_state[];
+}
+
 export interface IssueContent {
-	issue: Issues;
-	rule: Rules;
-	page: Pages;
-	page_state: Page_states;
+	issue: Issue;
+	rule: Rule;
+	page: Page;
+	page_state: Page_state;
 }
 
 // DB Interfaces
-// All indexed variables are required, but not all required values are indexed
 export interface Audit {
 	id?: number;
 	name: string;
@@ -22,7 +31,7 @@ export interface Audit {
 	issue_IDs: number[];
 }
 
-export interface Issues {
+export interface Issue {
 	id?: number;
 	rule_ID: string;
 	status: string;
@@ -32,27 +41,27 @@ export interface Issues {
 	description?: string;
 }
 
-export interface Pages {
+export interface Page {
 	id?: number;
 	name: string;
 	page_state_IDs: number[];
 	url: string;
 }
 
-export interface Page_states {
+export interface Page_state {
 	id?: number;
 	name: string;
 	page_ID?: number;
 	instructions?: string;
 }
 
-export interface Checklists {
+export interface Checklist {
 	id: number;
 	name: string;
 	rule_IDs: string[];
 }
 
-export interface Rules {
+export interface Rule {
 	id: number; // OATAudit Issue ID
 	rule_ID: string; // maps to ACT Issue ID
 	name: string;

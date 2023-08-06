@@ -1,5 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { JoinedAudit, Issues, IssueContent } from "../components/interfaces";
+import {
+	JoinedAudit,
+	JoinedPage,
+	Issue,
+	IssueContent,
+} from "../components/interfaces";
 import { db } from "../db";
 
 export default function useJoinedAudit(audit_ID: number) {
@@ -9,21 +14,47 @@ export default function useJoinedAudit(audit_ID: number) {
 		// setting joined_audit.audit
 		const db_audit = await db.audits.get(audit_ID);
 		if (!db_audit) return null;
-		joined_audit.audit = db_audit;
+		//joined_audit.audit = db_audit; // probably don't need to do this anymore
+
+		// setting joined_audit.name
+		if (db_audit.id) joined_audit.id = db_audit.id;
+
+		// setting joined_audit.name
+		joined_audit.name = db_audit.name;
 
 		// setting joined_audit.checklist
-		const checklist = await db.checklists.get(
-			joined_audit.audit.checklist_ID
-		);
+		const checklist = await db.checklists.get(db_audit.checklist_ID);
 		if (!checklist) return null;
 		joined_audit.checklist = checklist;
 
-		// setting joined_audit.issues
-		const issue_IDs: number[] = joined_audit.audit.issue_IDs;
-
-		const issues: Issues[] = await db.issues
+		// setting joined_audit.pages
+		const pages = await db.pages
 			.where("id")
-			.anyOf(issue_IDs)
+			.anyOf(db_audit.page_IDs)
+			.toArray();
+
+		joined_audit.pages = [];
+
+		for (const page of pages) {
+			const joined_page: JoinedPage = {} as JoinedPage;
+			joined_page.id = page.id;
+			joined_page.name = page.name;
+			joined_page.url = page.url;
+
+			const page_states = await db.page_states
+				.where("id")
+				.anyOf(page.page_state_IDs)
+				.toArray();
+
+			joined_page.page_states = page_states;
+
+			joined_audit.pages.push(joined_page);
+		}
+
+		// setting joined_audit.issues
+		const issues: Issue[] = await db.issues
+			.where("id")
+			.anyOf(db_audit.issue_IDs)
 			.toArray();
 
 		joined_audit.issues = [];
