@@ -194,10 +194,11 @@ function PageStateSettings({ page_state }: { page_state: Page_state }) {
 		event.preventDefault();
 
 		try {
-			await db.page_states.update(page_state.id, {
-				name: name,
-				instructions: instructions,
-			});
+			if (page_state.id)
+				await db.page_states.update(page_state.id, {
+					name: name,
+					instructions: instructions,
+				});
 		} catch (error) {
 			console.log("Failed to update page state: " + name + "::" + error);
 		}
