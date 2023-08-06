@@ -94,16 +94,71 @@ export default function AuditSettingsPage() {
 }
 
 function PageSettings({ page }: { page: JoinedPage }) {
+	const label_update_page_name = useId();
+	const label_update_page_url = useId();
+
+	const original_name = page.name;
+	const original_url = page.url;
+
+	const [name, setName] = useState(original_name);
+	const [url, setUrl] = useState(original_url);
+
+	const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setName(event.target.value);
+	};
+
+	const handleUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setUrl(event.target.value);
+	};
+
+	async function handleUpdatePage(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			await db.pages.update(page.id, {
+				name: name,
+				url: url,
+			});
+		} catch (error) {
+			console.log("Failed to create page state: " + name + "::" + error);
+		}
+	}
+
 	return (
 		<>
-			<p>===START PAGE===</p>
-			<p>= Page ID {page.id}</p>
-			<p>= Page Name {page.name}</p>
-			<p>= Page URL {page.url}</p>
+			<Form onSubmit={handleUpdatePage}>
+				<fieldset>
+					<legend>
+						Page: {page.name} (id:{page.id})
+					</legend>
+					<label htmlFor={label_update_page_name}>
+						Page Name: {original_name != name ? <Updated /> : null}
+					</label>
+					<br />
+					<input
+						id={label_update_page_name}
+						value={name}
+						onChange={handleName}
+					/>
+					<br />
+					<label htmlFor={label_update_page_url}>
+						Page URL: {original_url != url ? <Updated /> : null}
+					</label>
+					<br />
+					<input
+						id={label_update_page_url}
+						value={url}
+						onChange={handleUrl}
+					/>
+					<input type="submit" value={"Update page"} />
+				</fieldset>
+			</Form>
+
 			{page.page_states.map((page_state) => (
 				<PageStateSettings page_state={page_state} />
 			))}
-			<p>===END PAGE===</p>
 		</>
 	);
 }
@@ -114,7 +169,7 @@ function PageStateSettings({ page_state }: { page_state: Page_state }) {
 
 	const original_name = page_state.name;
 
-	let original_instructions = " ";
+	let original_instructions = "";
 	if (page_state.instructions) {
 		original_instructions = page_state.instructions;
 	}
@@ -143,15 +198,15 @@ function PageStateSettings({ page_state }: { page_state: Page_state }) {
 				instructions: instructions,
 			});
 		} catch (error) {
-			console.log("Failed to create page state: " + name + "::" + error);
+			console.log("Failed to update page state: " + name + "::" + error);
 		}
 	}
 
 	return (
-		<Form onSubmit={(event) => handleUpdatePageState(event)}>
+		<Form onSubmit={handleUpdatePageState}>
 			<fieldset>
 				<legend>
-					{page_state.name} (id={page_state.id})
+					Page State: {page_state.name} (id={page_state.id})
 				</legend>
 				<label htmlFor={label_update_page_state_name}>
 					Page State Name:{" "}
