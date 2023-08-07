@@ -8,6 +8,11 @@ export default function Header() {
 				<li>
 					<Link to={"rules"}>Rules</Link>
 				</li>
+				<li>
+					<a href="https://github.com/garcialo/OATAudit">
+						OAT Audit on GitHub
+					</a>
+				</li>
 			</ul>
 		</header>
 	);
