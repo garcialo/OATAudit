@@ -4,7 +4,7 @@ import AuditList from "./AuditList";
 import { Form, useNavigate } from "react-router-dom";
 import { useId, useState } from "react";
 import ChecklistOptions from "../FormSelectChecklist/ChecklistOptions";
-import { db } from "../../db";
+import { db } from "../../db/db";
 
 export default function HomePage() {
 	setPageTitle("OAT Audit");
@@ -39,9 +39,10 @@ export default function HomePage() {
 			});
 			const page_ID_number = Number(page_ID);
 			// revisiting the page_state now that we have a page_ID for the foreign key
-			await db.page_states.update(page_state.id, {
-				page_ID: page_ID_number,
-			});
+			if (page_state && page_state.id)
+				await db.page_states.update(page_state.id, {
+					page_ID: page_ID_number,
+				});
 
 			const db_checklist = await db.checklists.get(checklist_ID);
 			const issue_IDs: number[] = [];

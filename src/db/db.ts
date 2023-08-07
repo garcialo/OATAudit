@@ -6,7 +6,7 @@ import {
 	Page_state,
 	Checklist,
 	Rule,
-} from "./components/interfaces";
+} from "../components/interfaces";
 
 export class AuditDB extends Dexie {
 	audits!: Table<Audit>;

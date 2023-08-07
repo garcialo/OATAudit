@@ -2,7 +2,7 @@
 import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import FormSelectChecklist from "../FormSelectChecklist/FormSelectChecklist";
 import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "../../db";
+import { db } from "../../db/db";
 import setPageTitle from "../../setPageTitle";
 
 export async function rulesLoader({ request }: LoaderFunctionArgs) {
