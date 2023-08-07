@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
-import { db } from "../../db";
+import { db } from "../../db/db";
 import { Audit, JoinedPage, Page, Page_state } from "../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {

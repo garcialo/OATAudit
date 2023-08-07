@@ -4,7 +4,7 @@ import AuditList from "./AuditList";
 import { Form, useNavigate } from "react-router-dom";
 import { useId, useState } from "react";
 import ChecklistOptions from "../FormSelectChecklist/ChecklistOptions";
-import { db } from "../../db";
+import { db } from "../../db/db";
 
 export default function HomePage() {
 	setPageTitle("OAT Audit");
