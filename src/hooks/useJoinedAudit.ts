@@ -5,7 +5,7 @@ import {
 	Issue,
 	IssueContent,
 } from "../components/interfaces";
-import { db } from "../db";
+import { db } from "../db/db";
 
 export default function useJoinedAudit(audit_ID: number) {
 	const audit = useLiveQuery(async () => {
@@ -37,7 +37,7 @@ export default function useJoinedAudit(audit_ID: number) {
 
 		for (const page of pages) {
 			const joined_page: JoinedPage = {} as JoinedPage;
-			joined_page.id = page.id;
+			joined_page.id = Number(page.id);
 			joined_page.name = page.name;
 			joined_page.url = page.url;
 
