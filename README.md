@@ -17,4 +17,5 @@ This project strives to recreate and eventually improve upon the auditing spread
 
 -   [Dexie.js (https://dexie.org/)](https://dexie.org/) a minimalistic wrapper for IndexedDB
 -   [React (https://www.react.dev/)](https://www.react.dev/)
+-   [React-Aria/Live-Announcer (https://www.npmjs.com/package/@react-aria/live-announcer)](https://www.npmjs.com/package/@react-aria/live-announcer)
 -   [TypeScript (https://www.typescriptlang.org/)](https://www.typescriptlang.org/)
