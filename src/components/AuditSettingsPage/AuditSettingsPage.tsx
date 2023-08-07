@@ -9,7 +9,7 @@ import {
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
 import { db } from "../../db";
-import { JoinedPage, Page, Page_state } from "../interfaces";
+import { Audit, JoinedPage, Page, Page_state } from "../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
@@ -26,10 +26,14 @@ export default function AuditSettingsPage() {
 	const label_id_audit_name = useId();
 	const label_name_section = useId();
 	const label_scope_section = useId();
+	const label_new_page_name = useId();
+	const label_new_page_url = useId();
 
 	const current_audit = useJoinedAudit(given_audit_ID);
 
 	const [new_audit_name, setNewAuditName] = useState("");
+	const [new_page_name, setNewPageName] = useState("");
+	const [new_page_url, setNewPageUrl] = useState("");
 
 	// audit.name input event handling
 	const handleAuditNameChange = (
@@ -56,6 +60,55 @@ export default function AuditSettingsPage() {
 			);
 		}
 	};
+
+	const handleNewPageName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setNewPageName(event.target.value);
+	};
+
+	const handleNewPageUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setNewPageUrl(event.target.value);
+	};
+
+	async function handleNewPage(
+		event: React.FormEvent<HTMLFormElement>
+	): Promise<void> {
+		event.preventDefault();
+
+		try {
+			const db_page_state_ID = await db.page_states.add({
+				name: "Initial",
+			});
+
+			const db_page_state_ID_number = Number(db_page_state_ID);
+
+			const db_page_ID = await db.pages.add({
+				name: new_page_name,
+				url: new_page_url,
+				page_state_IDs: [db_page_state_ID_number],
+			});
+
+			const db_page_ID_number = Number(db_page_ID);
+
+			await db.page_states.update(db_page_state_ID_number, {
+				page_ID: db_page_ID_number,
+			});
+
+			if (current_audit)
+				await db.audits
+					.where("id")
+					.equals(current_audit.id)
+					.modify((this_audit: Audit) =>
+						this_audit.page_IDs.push(db_page_ID_number)
+					);
+
+			setNewPageName("");
+			setNewPageUrl("");
+		} catch (error) {
+			console.log(
+				"Failed to create page: " + new_page_name + "::" + error
+			);
+		}
+	}
 
 	return (
 		<main>
@@ -89,6 +142,28 @@ export default function AuditSettingsPage() {
 				{current_audit.pages.map((page) => (
 					<PageSettings page={page} />
 				))}
+
+				<Form onSubmit={handleNewPage}>
+					<fieldset>
+						<legend>Page: New Page for {current_audit.name}</legend>
+						<label htmlFor={label_new_page_name}>Page Name:</label>
+						<br />
+						<input
+							id={label_new_page_name}
+							value={new_page_name}
+							onChange={handleNewPageName}
+						/>
+						<br />
+						<label htmlFor={label_new_page_url}>Page URL:</label>
+						<br />
+						<input
+							id={label_new_page_url}
+							value={new_page_url}
+							onChange={handleNewPageUrl}
+						/>
+						<input type="submit" value={"Create page"} />
+					</fieldset>
+				</Form>
 			</section>
 		</main>
 	);
@@ -164,6 +239,9 @@ function PageSettings({ page }: { page: JoinedPage }) {
 				.modify((this_page: Page) =>
 					this_page.page_state_IDs.push(new_page_state_ID_number)
 				);
+
+			setNewPageStateName("");
+			setNewPageStateInstructions("");
 		} catch (error) {
 			console.log("Failed to create page state: " + name + "::" + error);
 		}
@@ -212,6 +290,7 @@ function PageSettings({ page }: { page: JoinedPage }) {
 					<br />
 					<input
 						id={label_new_page_state_name}
+						value={new_page_state_name}
 						onChange={handleNewPageStateName}
 					/>
 					<br />
@@ -221,6 +300,7 @@ function PageSettings({ page }: { page: JoinedPage }) {
 					<br />
 					<textarea
 						id={label_new_page_state_instructions}
+						value={new_page_state_instructions}
 						onChange={handleNewPageStateInstructions}
 					/>
 					<input type="submit" value={"Create page state"} />
