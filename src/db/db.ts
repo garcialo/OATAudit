@@ -1,12 +1,5 @@
 import Dexie, { Table } from "dexie";
-import {
-	Audit,
-	Issue,
-	Page,
-	Page_state,
-	Checklist,
-	Rule,
-} from "../components/interfaces";
+import { Audit, Issue, Page, Page_state, Checklist, Rule } from "../interfaces";
 
 export class AuditDB extends Dexie {
 	audits!: Table<Audit>;

@@ -3,7 +3,7 @@ import setPageTitle from "../../setPageTitle";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../../db/db";
-import { IssueContent } from "../interfaces";
+import { IssueContent } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 
 export async function auditLoader({ request }: LoaderFunctionArgs) {

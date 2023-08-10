@@ -62,13 +62,43 @@ export interface Checklist {
 }
 
 export interface Rule {
-	id: number; // OATAudit Issue ID
+	id: number; // OATAudit ID
 	rule_ID: string; // maps to ACT Issue ID
 	name: string;
 	description: string;
 	accessibility_requirements?: string[];
-	//rule_type
-	//input_aspects
-	//input_rules
-	//acknowledgements
+}
+
+// data interfaces
+enum rule_type {
+	atomic = "atomic",
+	composite = "composite",
+}
+
+interface AccessibilityRequirement {
+	ruleset: string;
+	ruleName: string;
+	ruleNumber: string;
+	forConformance: boolean;
+	failed?: "not satisfied";
+	passed?: string;
+	inapplicable?: string;
+}
+
+export interface OatChecklist {
+	name: string;
+	check_IDs: string[];
+}
+
+export interface OatCheck {
+	id: string;
+	name: string;
+	rule_type?: rule_type;
+	description: string;
+	accessibility_requirements?: AccessibilityRequirement[];
+	acknowledgements?: {
+		authors: string[];
+		previous_authors?: string[];
+	};
+	background?: string[];
 }

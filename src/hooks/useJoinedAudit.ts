@@ -1,10 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import {
-	JoinedAudit,
-	JoinedPage,
-	Issue,
-	IssueContent,
-} from "../components/interfaces";
+import { JoinedAudit, JoinedPage, Issue, IssueContent } from "../interfaces";
 import { db } from "../db/db";
 
 export default function useJoinedAudit(audit_ID: number) {
