@@ -167,7 +167,6 @@ db.on("populate", async () => {
 			rule_ID: "log-1000",
 			name: "Title is not empty",
 			description: "The title element has innerHTML",
-			accessibility_requirements: ["WCAG 2.0", "WCAG 2.1", "WCAG 2.2"],
 		},
 		{
 			id: 2,
@@ -175,7 +174,6 @@ db.on("populate", async () => {
 			name: "Title is descriptive",
 			description:
 				"The title element innerHTML describes the page content",
-			accessibility_requirements: ["WCAG 2.0", "WCAG 2.1", "WCAG 2.2"],
 		},
 	]);
 });

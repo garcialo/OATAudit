@@ -33,7 +33,6 @@ export default function RulesPage() {
 						<th>Rule ID</th>
 						<th>Rule Name</th>
 						<th>Rule Description</th>
-						<th>Accessibility Requirements</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,7 +82,6 @@ function RuleRows({ rule_IDs }: { rule_IDs: string[] }) {
 					<td>{rule.rule_ID}</td>
 					<td>{rule.name}</td>
 					<td>{rule.description}</td>
-					<td>{rule.accessibility_requirements}</td>
 				</tr>
 			))}
 		</>
@@ -102,7 +100,6 @@ function AllRules() {
 					<td>{rule.rule_ID}</td>
 					<td>{rule.name}</td>
 					<td>{rule.description}</td>
-					<td>{rule.accessibility_requirements}</td>
 				</tr>
 			))}
 		</>
