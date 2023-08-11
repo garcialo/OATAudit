@@ -1,5 +1,13 @@
 import Dexie, { Table } from "dexie";
-import { Audit, Issue, Page, Page_state, Checklist, Rule } from "../interfaces";
+import {
+	Audit,
+	Issue,
+	Page,
+	Page_state,
+	Checklist,
+	Check,
+} from "../interfaces";
+import { all_checks } from "../data/importChecks";
 
 export class AuditDB extends Dexie {
 	audits!: Table<Audit>;
@@ -7,7 +15,7 @@ export class AuditDB extends Dexie {
 	pages!: Table<Page>;
 	page_states!: Table<Page_state>;
 	checklists!: Table<Checklist>;
-	rules!: Table<Rule>;
+	checks!: Table<Check>;
 
 	constructor() {
 		super("OAT Audit");
@@ -16,8 +24,8 @@ export class AuditDB extends Dexie {
 			issues: "++id,rule_ID,status,page_state_ID,page_ID",
 			pages: "++id,name,*page_state_IDs",
 			page_states: "++id,name,page_ID",
-			checklists: "++id,&name,*rule_IDs",
-			rules: "++id,rule_ID,rule_name,*accessibility_requirements",
+			checklists: "++id,&name,*check_IDs",
+			checks: "++id,check_ID,*checklist_IDs",
 		});
 	}
 }
@@ -42,13 +50,13 @@ db.on("populate", async () => {
 	]);
 
 	db.checklists.bulkPut([
-		{ id: 300, rule_IDs: ["log-1000"], name: "One rule checklist" },
+		{ id: 300, check_IDs: ["log-1000"], name: "One rule checklist" },
 		{
 			id: 301,
-			rule_IDs: ["log-1000", "log-1001"],
+			check_IDs: ["log-1000", "log-1001"],
 			name: "Two rule checklist",
 		},
-		{ id: 1, rule_IDs: ["log-1001"], name: "Only 1001 - default" },
+		{ id: 1, check_IDs: ["log-1001"], name: "Only 1001 - default" },
 	]);
 
 	db.issues.bulkPut([
@@ -161,19 +169,5 @@ db.on("populate", async () => {
 		},
 	]);
 
-	db.rules.bulkPut([
-		{
-			id: 1,
-			rule_ID: "log-1000",
-			name: "Title is not empty",
-			description: "The title element has innerHTML",
-		},
-		{
-			id: 2,
-			rule_ID: "log-1001",
-			name: "Title is descriptive",
-			description:
-				"The title element innerHTML describes the page content",
-		},
-	]);
+	db.checks.bulkPut(all_checks);
 });

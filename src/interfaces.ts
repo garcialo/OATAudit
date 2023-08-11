@@ -56,9 +56,18 @@ export interface Page_state {
 }
 
 export interface Checklist {
-	id: number;
+	id?: number;
 	name: string;
-	rule_IDs: string[];
+	check_IDs: string[];
+}
+
+export interface Check {
+	id?: number; // internal app id
+	check_ID: string; // external "check_ID" maybe will change to ACT composite rule ID?
+	name?: string;
+	description?: string;
+	checklist_IDs: number[];
+	rule_IDs?: number[]; // reference to specific ACT-formatted rules
 }
 
 export interface Rule {
@@ -66,39 +75,18 @@ export interface Rule {
 	rule_ID: string; // maps to ACT Issue ID
 	name: string;
 	description: string;
-	accessibility_requirements?: string[];
-}
-
-// data interfaces
-enum rule_type {
-	atomic = "atomic",
-	composite = "composite",
+	accessibility_requirements_IDs: number[];
 }
 
 interface AccessibilityRequirement {
+	rule_ID: number;
+	id: number;
 	ruleset: string;
 	ruleName: string;
 	ruleNumber: string;
+	ruleLevel?: string;
 	forConformance: boolean;
 	failed?: "not satisfied";
 	passed?: string;
 	inapplicable?: string;
-}
-
-export interface OatChecklist {
-	name: string;
-	check_IDs: string[];
-}
-
-export interface OatCheck {
-	id: string;
-	name: string;
-	rule_type?: rule_type;
-	description: string;
-	accessibility_requirements?: AccessibilityRequirement[];
-	acknowledgements?: {
-		authors: string[];
-		previous_authors?: string[];
-	};
-	background?: string[];
 }
