@@ -8,7 +8,7 @@
 */
 // Putting the checks into the DB is done by /db/db.ts
 //
-// Now back to importing all of the rules in /src/data/rules
+// Now back to importing all of the checks in /src/data/checks
 import { Check } from "../interfaces";
 import { oat0001 } from "./checks/oat0001";
 

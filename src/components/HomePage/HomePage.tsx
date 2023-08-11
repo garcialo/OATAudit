@@ -46,9 +46,9 @@ export default function HomePage() {
 
 			const db_checklist = await db.checklists.get(checklist_ID);
 			const issue_IDs: number[] = [];
-			for (const rule_ID of db_checklist?.rule_IDs || []) {
+			for (const check_ID of db_checklist?.check_IDs || []) {
 				const issue_ID = await db.issues.add({
-					rule_ID: rule_ID,
+					check_ID: check_ID,
 					status: "Check Incomplete",
 					page_state_ID: page_state_ID_number,
 					page_ID: page_ID_number,

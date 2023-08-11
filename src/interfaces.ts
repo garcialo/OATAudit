@@ -17,7 +17,7 @@ export interface JoinedPage {
 
 export interface IssueContent {
 	issue: Issue;
-	rule: Rule;
+	check: Check;
 	page: Page;
 	page_state: Page_state;
 }
@@ -33,7 +33,7 @@ export interface Audit {
 
 export interface Issue {
 	id?: number;
-	rule_ID: string;
+	check_ID: string;
 	status: string;
 	page_state_ID: number;
 	page_ID: number;

@@ -6,7 +6,7 @@ export default function Header() {
 			<Link to={"/"}>Home</Link>
 			<ul>
 				<li>
-					<Link to={"rules"}>Rules</Link>
+					<Link to={"/checks"}>Checks</Link>
 				</li>
 				<li>
 					<a href="https://github.com/garcialo/OATAudit">

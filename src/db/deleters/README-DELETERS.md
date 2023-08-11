@@ -2,9 +2,9 @@
 
 ## General
 
--   Checklist and Rule deletion is separate from Audit part (i.e. Audits, Pages, Page States, Issues) deletion.
--   Audit deletion will never delete Checklists/Rules
--   Checklist/Rule deletion will never delete Audit parts
+-   Checklist and Check deletion is separate from Audit part (i.e. Audits, Pages, Page States, Issues) deletion.
+-   Audit deletion will never delete Checklists/Checks
+-   Checklist/Check deletion will never delete Audit parts
 -   Calling an Audit part deleter will first delete relevant downstream content and then delete itself.
 
 ### deleteIssue.ts

@@ -5,15 +5,15 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../../db/db";
 import setPageTitle from "../../setPageTitle";
 
-export async function rulesLoader({ request }: LoaderFunctionArgs) {
+export async function checksLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
 	const checklist_ID = Number(url.searchParams.get("checklist_ID"));
 
 	return { given_checklist_ID: checklist_ID };
 }
 
-export default function RulesPage() {
-	setPageTitle("Rules - OAT Audit");
+export default function ChecksPage() {
+	setPageTitle("Checks - OAT Audit");
 
 	const { given_checklist_ID } = useLoaderData() as {
 		given_checklist_ID: number;
@@ -21,25 +21,25 @@ export default function RulesPage() {
 
 	return (
 		<main>
-			<h1>Rules</h1>
+			<h1>Checks</h1>
 			<FormSelectChecklist
-				actionValue="/rules"
+				actionValue="/checks"
 				submitButtonText="Select Checklist"
 			/>
 
 			<table>
 				<thead>
 					<tr>
-						<th>Rule ID</th>
-						<th>Rule Name</th>
-						<th>Rule Description</th>
+						<th>Check ID</th>
+						<th>Check Name</th>
+						<th>Check Description</th>
 					</tr>
 				</thead>
 				<tbody>
 					{given_checklist_ID ? (
-						<ChecklistRules checklist_ID={given_checklist_ID} />
+						<ChecklistChecks checklist_ID={given_checklist_ID} />
 					) : (
-						<AllRules />
+						<AllChecks />
 					)}
 				</tbody>
 			</table>
@@ -47,7 +47,7 @@ export default function RulesPage() {
 	);
 }
 
-function ChecklistRules({ checklist_ID }: { checklist_ID: number }) {
+function ChecklistChecks({ checklist_ID }: { checklist_ID: number }) {
 	const checklist = useLiveQuery(async () => {
 		const db_checklist = await db.checklists.get(checklist_ID);
 
@@ -58,48 +58,48 @@ function ChecklistRules({ checklist_ID }: { checklist_ID: number }) {
 
 	return (
 		<>
-			<RuleRows rule_IDs={checklist.rule_IDs} />
+			<CheckRows check_IDs={checklist.check_IDs} />
 		</>
 	);
 }
 
-function RuleRows({ rule_IDs }: { rule_IDs: string[] }) {
-	const rules = useLiveQuery(async () => {
-		const db_rules = await db.rules
-			.where("rule_ID")
-			.anyOf(rule_IDs)
+function CheckRows({ check_IDs }: { check_IDs: string[] }) {
+	const checks = useLiveQuery(async () => {
+		const db_checks = await db.checks
+			.where("check_ID")
+			.anyOf(check_IDs)
 			.toArray();
 
-		return db_rules;
-	}, [rule_IDs]);
+		return db_checks;
+	}, [check_IDs]);
 
-	if (!rules) return null;
+	if (!checks) return null;
 
 	return (
 		<>
-			{rules.map((rule) => (
-				<tr key={rule.id}>
-					<td>{rule.rule_ID}</td>
-					<td>{rule.name}</td>
-					<td>{rule.description}</td>
+			{checks.map((check) => (
+				<tr key={check.id}>
+					<td>{check.check_ID}</td>
+					<td>{check.name}</td>
+					<td>{check.description}</td>
 				</tr>
 			))}
 		</>
 	);
 }
 
-function AllRules() {
-	const all_rules = useLiveQuery(() => db.rules.toArray());
+function AllChecks() {
+	const all_checks = useLiveQuery(() => db.checks.toArray());
 
-	if (!all_rules) return null;
+	if (!all_checks) return null;
 
 	return (
 		<>
-			{all_rules.map((rule) => (
-				<tr key={rule.id}>
-					<td>{rule.rule_ID}</td>
-					<td>{rule.name}</td>
-					<td>{rule.description}</td>
+			{all_checks.map((check) => (
+				<tr key={check.id}>
+					<td>{check.check_ID}</td>
+					<td>{check.name}</td>
+					<td>{check.description}</td>
 				</tr>
 			))}
 		</>

@@ -8,6 +8,7 @@ import {
 	Check,
 } from "../interfaces";
 import { all_checks } from "../data/importChecks";
+import { all_checklists } from "../data/importChecklists";
 
 export class AuditDB extends Dexie {
 	audits!: Table<Audit>;
@@ -21,7 +22,7 @@ export class AuditDB extends Dexie {
 		super("OAT Audit");
 		this.version(1).stores({
 			audits: "++id,name,checklist_ID,*page_IDs,*issue_IDs",
-			issues: "++id,rule_ID,status,page_state_ID,page_ID",
+			issues: "++id,check_ID,status,page_state_ID,page_ID",
 			pages: "++id,name,*page_state_IDs",
 			page_states: "++id,name,page_ID",
 			checklists: "++id,&name,*check_IDs",
@@ -49,20 +50,22 @@ db.on("populate", async () => {
 		},
 	]);
 
+	db.checklists.bulkPut(all_checklists);
+
 	db.checklists.bulkPut([
-		{ id: 300, check_IDs: ["log-1000"], name: "One rule checklist" },
+		{ id: 300, check_IDs: ["log-1000"], name: "One check checklist" },
 		{
 			id: 301,
 			check_IDs: ["log-1000", "log-1001"],
-			name: "Two rule checklist",
+			name: "Two check checklist",
 		},
-		{ id: 1, check_IDs: ["log-1001"], name: "Only 1001 - default" },
+		{ id: 2, check_IDs: ["log-1001"], name: "Only 1001 - default" },
 	]);
 
 	db.issues.bulkPut([
 		{
 			id: 200,
-			rule_ID: "log-1000",
+			check_ID: "log-1000",
 			status: "Pass",
 			page_state_ID: 100,
 			page_ID: 400,
@@ -70,7 +73,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 201,
-			rule_ID: "log-1001",
+			check_ID: "log-1001",
 			status: "Pass",
 			page_state_ID: 100,
 			page_ID: 400,
@@ -78,7 +81,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 202,
-			rule_ID: "log-1000",
+			check_ID: "log-1000",
 			status: "Pass",
 			page_state_ID: 101,
 			page_ID: 400,
@@ -86,7 +89,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 203,
-			rule_ID: "log-1001",
+			check_ID: "log-1001",
 			status: "Fail",
 			page_state_ID: 101,
 			page_ID: 400,
@@ -95,7 +98,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 204,
-			rule_ID: "log-1000",
+			check_ID: "log-1000",
 			status: "Fail",
 			page_state_ID: 102,
 			page_ID: 401,
@@ -104,7 +107,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 205,
-			rule_ID: "log-1001",
+			check_ID: "log-1001",
 			status: "Fail",
 			page_state_ID: 102,
 			page_ID: 401,
@@ -113,7 +116,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 206,
-			rule_ID: "log-1000",
+			check_ID: "log-1000",
 			status: "Pass",
 			page_state_ID: 103,
 			page_ID: 401,
@@ -121,7 +124,7 @@ db.on("populate", async () => {
 		},
 		{
 			id: 207,
-			rule_ID: "log-1001",
+			check_ID: "log-1001",
 			status: "Fail",
 			page_state_ID: 103,
 			page_ID: 401,
