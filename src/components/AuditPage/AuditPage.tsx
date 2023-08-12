@@ -1,8 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import setPageTitle from "../../setPageTitle";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "../../db/db";
 import { IssueContent } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 
@@ -17,83 +15,41 @@ export async function auditLoader({ request }: LoaderFunctionArgs) {
 export default function AuditPage() {
 	setPageTitle("Audit - OAT Audit");
 
-	const { given_audit_ID, given_checklist_ID } = useLoaderData() as {
+	const { given_audit_ID } = useLoaderData() as {
 		given_audit_ID: number;
-		given_checklist_ID: number;
 	};
 
 	return (
 		<>
-			<nav>
-				<h2>Pages</h2>
-				<button>All Pages</button>
-				<h3>
-					<button>Page.Name</button>
-				</h3>
-				<ul>
-					<li>
-						<button>PageState.Name</button>
-					</li>
-				</ul>
-			</nav>
+			<PageAndStateNav />
 			<main>
+				<h2>Issues</h2>
+				<IssueTable audit_ID={given_audit_ID} />
+			</main>
+		</>
+	);
+	/* Commenting out for now
 				<section aria-labelledby="actions">
 					<h2 id="actions">Actions</h2>
 					<p>Action Content</p>
 				</section>
-				<h2>Issues</h2>
-				{given_checklist_ID ? (
-					<NewIssuesTable checklist_ID={given_checklist_ID} />
-				) : (
-					<IssueTable audit_ID={given_audit_ID} />
-				)}
-			</main>
-		</>
-	);
+	*/
 }
 
-function NewIssuesTable({ checklist_ID }: { checklist_ID: number }) {
-	const rules = useLiveQuery(async () => {
-		const db_checklist = await db.checklists.get(checklist_ID);
-
-		if (!db_checklist) return null;
-
-		const db_rules = await db.rules
-			.where("rule_ID")
-			.anyOf(db_checklist.rule_IDs)
-			.toArray();
-
-		return db_rules;
-	}, [checklist_ID]);
-
-	if (!rules) return null;
-
+function PageAndStateNav() {
 	return (
-		<table>
-			<thead>
-				<tr>
-					<th id="issue-description">Issue Description</th>
-					<th>Issue Status</th>
-					<th>Rule Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				{rules.map((rule) => (
-					<tr key={rule.id}>
-						<td>
-							<textarea
-								name="textarea"
-								aria-labelledby="issue-description"
-							/>
-						</td>
-						<td>
-							<IssueStatusSelect />
-						</td>
-						<td>{rule.description}</td>
-					</tr>
-				))}
-			</tbody>
-		</table>
+		<nav>
+			<h2>Pages</h2>
+			<button>All Pages</button>
+			<h3>
+				<button>Page.Name</button>
+			</h3>
+			<ul>
+				<li>
+					<button>PageState.Name</button>
+				</li>
+			</ul>
+		</nav>
 	);
 }
 
@@ -108,8 +64,7 @@ function IssueTable({ audit_ID }: { audit_ID: number }) {
 				<tr>
 					<th id="issue-description">Issue Description</th>
 					<th>Issue Status</th>
-					<th>Rule Description</th>
-					<th>Accessibility Requirements</th>
+					<th>Check Description</th>
 					<th>Page State Name</th>
 					<th>Page Name</th>
 				</tr>
@@ -140,8 +95,7 @@ function IssueRows({
 					<td>
 						<IssueStatusSelect />
 					</td>
-					<td>{issue_content.rule.name}</td>
-					<td>{issue_content.rule.accessibility_requirements}</td>
+					<td>{issue_content.check.description}</td>
 					<td>{issue_content.page_state.name}</td>
 					<td>{issue_content.page.name}</td>
 				</tr>
@@ -162,7 +116,9 @@ function IssueStatusSelect() {
 	return (
 		<select>
 			{statuses.map((status) => (
-				<option value={status.value}>{status.text}</option>
+				<option key={status.value} value={status.value}>
+					{status.text}
+				</option>
 			))}
 		</select>
 	);
