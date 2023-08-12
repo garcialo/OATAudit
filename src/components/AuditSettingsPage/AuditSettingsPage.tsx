@@ -9,7 +9,7 @@ import {
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 import setPageTitle from "../../setPageTitle";
 import { db } from "../../db/db";
-import { Audit, JoinedPage, Page, Page_state } from "../interfaces";
+import { Audit, JoinedPage, Page, Page_state } from "../../interfaces";
 
 export async function auditSettingsLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);

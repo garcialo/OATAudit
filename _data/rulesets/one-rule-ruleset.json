@@ -1,7 +1,0 @@
-{
-  "name": "One rule ruleset",
-  "description": "Single rule ruleset for proof-of-concept testing purposes.",
-  "rules": [
-      "test-1000"
-    ]
-}

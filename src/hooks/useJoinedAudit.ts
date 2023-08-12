@@ -1,10 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import {
-	JoinedAudit,
-	JoinedPage,
-	Issue,
-	IssueContent,
-} from "../components/interfaces";
+import { JoinedAudit, JoinedPage, Issue, IssueContent } from "../interfaces";
 import { db } from "../db/db";
 
 export default function useJoinedAudit(audit_ID: number) {
@@ -60,8 +55,8 @@ export default function useJoinedAudit(audit_ID: number) {
 		joined_audit.issues = [];
 
 		for (const issue of issues) {
-			const [rule, page, page_state] = await Promise.all([
-				db.rules.where("rule_ID").equals(issue.rule_ID).first(),
+			const [check, page, page_state] = await Promise.all([
+				db.checks.where("check_ID").equals(issue.check_ID).first(),
 				db.pages.where("id").equals(issue.page_ID).first(),
 				db.page_states.where("id").equals(issue.page_state_ID).first(),
 			]);
@@ -69,8 +64,8 @@ export default function useJoinedAudit(audit_ID: number) {
 			const issue_content: IssueContent = {} as IssueContent;
 			issue_content.issue = issue;
 
-			if (!rule || !page || !page_state) return null;
-			issue_content.rule = rule;
+			if (!check || !page || !page_state) return null;
+			issue_content.check = check;
 			issue_content.page = page;
 			issue_content.page_state = page_state;
 

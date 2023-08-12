@@ -6,7 +6,9 @@ import "./index.css";
 import Header from "./components/Header.tsx";
 import ErrorPage from "./components/ErrorPage.tsx";
 import HomePage from "./components/HomePage/HomePage.tsx";
-import RulesPage, { rulesLoader } from "./components/RulesPage/RulesPage.tsx";
+import ChecksPage, {
+	checksLoader,
+} from "./components/ChecksPage/ChecksPage.tsx";
 import AuditPage, { auditLoader } from "./components/AuditPage/AuditPage.tsx";
 import AuditSettingsPage, {
 	auditSettingsLoader,
@@ -32,9 +34,9 @@ const router = createBrowserRouter([
 				element: <HomePage />,
 			},
 			{
-				path: "/rules",
-				loader: rulesLoader,
-				element: <RulesPage />,
+				path: "/checks",
+				loader: checksLoader,
+				element: <ChecksPage />,
 			},
 			{
 				path: "/audit",
