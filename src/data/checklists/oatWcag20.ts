@@ -1,7 +1,7 @@
 import { Checklist } from "../../interfaces";
 
 export const oatWcag20: Checklist = {
-	id: 1,
+	id: 2,
 	name: "OAT WCAG 2.0",
 	check_IDs: [
 		"oat0001",
