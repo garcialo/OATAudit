@@ -31,7 +31,6 @@ export default function ChecksPage() {
 				<thead>
 					<tr>
 						<th>Check ID</th>
-						<th>Check Name</th>
 						<th>Check Description</th>
 					</tr>
 				</thead>
@@ -80,7 +79,6 @@ function CheckRows({ check_IDs }: { check_IDs: string[] }) {
 			{checks.map((check) => (
 				<tr key={check.id}>
 					<td>{check.check_ID}</td>
-					<td>{check.name}</td>
 					<td>{check.description}</td>
 				</tr>
 			))}
@@ -98,7 +96,6 @@ function AllChecks() {
 			{all_checks.map((check) => (
 				<tr key={check.id}>
 					<td>{check.check_ID}</td>
-					<td>{check.name}</td>
 					<td>{check.description}</td>
 				</tr>
 			))}
