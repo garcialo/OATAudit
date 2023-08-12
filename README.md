@@ -10,7 +10,7 @@ This project strives to recreate and eventually improve upon the auditing spread
 
 ## Goals
 
--   Striving to be fuly accessible
+-   Striving to be fully accessible
 -   Remaining free and open-source
 
 ## Built with
