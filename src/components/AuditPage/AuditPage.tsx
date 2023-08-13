@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import setPageTitle from "../../setPageTitle";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import { IssueContent } from "../../interfaces";
+import { IssueContent, JoinedPage } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 
 export async function auditLoader({ request }: LoaderFunctionArgs) {
@@ -19,12 +19,16 @@ export default function AuditPage() {
 		given_audit_ID: number;
 	};
 
+	const audit = useJoinedAudit(given_audit_ID);
+
+	if (!audit) return null;
+
 	return (
 		<>
-			<PageAndStateNav />
+			<PageAndStateNav pages={audit.pages} />
 			<main>
 				<h2>Issues</h2>
-				<IssueTable audit_ID={given_audit_ID} />
+				<IssueTable issues={audit.issues} />
 			</main>
 		</>
 	);
@@ -36,28 +40,30 @@ export default function AuditPage() {
 	*/
 }
 
-function PageAndStateNav() {
+function PageAndStateNav({ pages }: { pages: JoinedPage[] }) {
 	return (
 		<nav>
 			<h2>Pages</h2>
 			<button>All Pages</button>
-			<h3>
-				<button>Page.Name</button>
-			</h3>
-			<ul>
-				<li>
-					<button>PageState.Name</button>
-				</li>
-			</ul>
+			{pages.map((page) => (
+				<>
+					<h3 key={page.id}>
+						<button>{page.name}</button>
+					</h3>
+					<ul>
+						{page.page_states.map((state) => (
+							<li key={state.id}>
+								<button>{state.name}</button>
+							</li>
+						))}
+					</ul>
+				</>
+			))}
 		</nav>
 	);
 }
 
-function IssueTable({ audit_ID }: { audit_ID: number }) {
-	const audit = useJoinedAudit(audit_ID);
-
-	if (!audit) return null;
-
+function IssueTable({ issues }: { issues: IssueContent[] }) {
 	return (
 		<table>
 			<thead>
@@ -70,7 +76,7 @@ function IssueTable({ audit_ID }: { audit_ID: number }) {
 				</tr>
 			</thead>
 			<tbody>
-				<IssueRows issue_content_array={audit.issues} />
+				<IssueRows issue_content_array={issues} />
 			</tbody>
 		</table>
 	);
