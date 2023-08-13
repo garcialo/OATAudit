@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import setPageTitle from "../../setPageTitle";
-import { type LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { type LoaderFunctionArgs, useLoaderData, Link } from "react-router-dom";
 import { IssueContent, JoinedPage } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 
@@ -24,13 +24,15 @@ export default function AuditPage() {
 	if (!audit) return null;
 
 	return (
-		<>
+		<main>
+			<h1>{audit.name}</h1>
+			<Link to={"/audit/settings?audit_ID=" + audit.id}>
+				{"Audit Settings"}
+			</Link>
 			<PageAndStateNav pages={audit.pages} />
-			<main>
-				<h2>Issues</h2>
-				<IssueTable issues={audit.issues} />
-			</main>
-		</>
+			<h2>Issues</h2>
+			<IssueTable issues={audit.issues} />
+		</main>
 	);
 	/* Commenting out for now
 				<section aria-labelledby="actions">
