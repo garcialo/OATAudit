@@ -6,7 +6,7 @@ import {
 	useLoaderData,
 	Link,
 	useNavigate,
-	NavigateFunction,
+	useSearchParams,
 } from "react-router-dom";
 import { IssueContent, JoinedAudit, JoinedPage } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
@@ -64,11 +64,7 @@ export default function AuditPage() {
 			<Link to={"/audit/settings?audit_ID=" + audit.id}>
 				{"Audit Settings"}
 			</Link>
-			<PageAndStateNav
-				pages={audit.pages}
-				navigate={navigate}
-				audit_ID={audit.id}
-			/>
+			<PageAndStateNav pages={audit.pages} audit_ID={audit.id} />
 			<h2>
 				Issues - {view} - {id}
 			</h2>
@@ -85,22 +81,32 @@ export default function AuditPage() {
 
 function PageAndStateNav({
 	pages,
-	navigate,
 	audit_ID,
 }: {
 	pages: JoinedPage[];
-	navigate: NavigateFunction;
 	audit_ID: number;
 }) {
+	const [urlParams, setUrlParams] = useSearchParams();
+
+	const handleAll = () => {
+		setUrlParams({ audit_ID: "" + audit_ID });
+	};
+
+	const handlePage = (page_ID: number) => {
+		setUrlParams({ audit_ID: "" + audit_ID, page_ID: "" + page_ID });
+	};
+
+	const handlePageState = (page_state_ID: number) => {
+		setUrlParams({
+			audit_ID: "" + audit_ID,
+			page_state_ID: "" + page_state_ID,
+		});
+	};
+
 	return (
 		<nav>
 			<h2>Pages</h2>
-			<button
-				type="button"
-				onClick={() => {
-					navigate("/audit?audit_ID=" + audit_ID);
-				}}
-			>
+			<button type="button" onClick={handleAll}>
 				All Pages
 			</button>
 			{pages.map((page) => (
@@ -108,14 +114,7 @@ function PageAndStateNav({
 					<h3 key={page.id}>
 						<button
 							type="button"
-							onClick={() => {
-								navigate(
-									"/audit?audit_ID=" +
-										audit_ID +
-										"&page_ID=" +
-										page.id
-								);
-							}}
+							onClick={() => handlePage(page.id)}
 						>
 							{page.name} (id:{page.id})
 						</button>
@@ -125,14 +124,9 @@ function PageAndStateNav({
 							<li key={page_state.id}>
 								<button
 									type="button"
-									onClick={() => {
-										navigate(
-											"/audit?audit_ID=" +
-												audit_ID +
-												"&page_state_ID=" +
-												page_state.id
-										);
-									}}
+									onClick={() =>
+										handlePageState(Number(page_state.id))
+									}
 								>
 									{page_state.name} (id:{page_state.id})
 								</button>
