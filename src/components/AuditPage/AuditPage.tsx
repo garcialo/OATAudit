@@ -5,7 +5,6 @@ import {
 	type LoaderFunctionArgs,
 	useLoaderData,
 	Link,
-	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
 import { IssueContent, JoinedAudit, JoinedPage } from "../../interfaces";
@@ -38,20 +37,20 @@ export default function AuditPage() {
 
 	if (!audit) return null;
 
-	const isValid = validateUrl({
+	const paramsAreValid = validateUrlParams({
 		given_page_ID: given_page_ID,
 		given_page_state_ID: given_page_state_ID,
 		joined_audit: audit,
 	});
 
-	// using useState resulted in endless loops; need to look into it
+	// tried useState, but the rerender results in looping
 	let view = "audit";
 	let id = audit.id;
 
-	if (given_page_state_ID && isValid) {
+	if (given_page_state_ID && paramsAreValid) {
 		view = "page_state";
 		id = given_page_state_ID;
-	} else if (given_page_ID && isValid) {
+	} else if (given_page_ID && paramsAreValid) {
 		view = "page";
 		id = given_page_ID;
 	}
@@ -84,7 +83,7 @@ function PageAndStateNav({
 	pages: JoinedPage[];
 	audit_ID: number;
 }) {
-	const [urlParams, setUrlParams] = useSearchParams();
+	const [, setUrlParams] = useSearchParams();
 
 	const handleAll = () => {
 		setUrlParams({ audit_ID: "" + audit_ID });
@@ -150,6 +149,7 @@ function IssueTable({
 		<table>
 			<thead>
 				<tr>
+					<th>ID</th>
 					<th id="issue-description">Issue Description</th>
 					<th>Issue Status</th>
 					<th>Check Description</th>
@@ -193,6 +193,7 @@ function IssueRows({
 				if (showIssue)
 					return (
 						<tr key={issue_content.issue.id}>
+							<td>{issue_content.issue.id}</td>
 							<td>
 								<textarea
 									name={"" + issue_content.issue.id}
@@ -242,7 +243,7 @@ function IssueStatusSelect() {
 	);
 }
 
-function validateUrl({
+function validateUrlParams({
 	given_page_ID,
 	given_page_state_ID,
 	joined_audit,
