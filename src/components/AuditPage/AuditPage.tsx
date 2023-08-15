@@ -1,27 +1,62 @@
 /* eslint-disable react-refresh/only-export-components */
+import { useId, useState } from "react";
 import setPageTitle from "../../setPageTitle";
-import { type LoaderFunctionArgs, useLoaderData, Link } from "react-router-dom";
-import { IssueContent, JoinedPage } from "../../interfaces";
+import {
+	type LoaderFunctionArgs,
+	useLoaderData,
+	Link,
+	useNavigate,
+	NavigateFunction,
+} from "react-router-dom";
+import { IssueContent, JoinedAudit, JoinedPage } from "../../interfaces";
 import useJoinedAudit from "../../hooks/useJoinedAudit";
 
 export async function auditLoader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url);
 	const audit_ID = Number(url.searchParams.get("audit_ID"));
-	const checklist_ID = Number(url.searchParams.get("checklist_ID"));
+	const page_ID = Number(url.searchParams.get("page_ID"));
+	const page_state_ID = Number(url.searchParams.get("page_state_ID"));
 
-	return { given_audit_ID: audit_ID, given_checklist_ID: checklist_ID };
+	return {
+		given_audit_ID: audit_ID,
+		given_page_ID: page_ID,
+		given_page_state_ID: page_state_ID,
+	};
 }
 
 export default function AuditPage() {
 	setPageTitle("Audit - OAT Audit");
 
-	const { given_audit_ID } = useLoaderData() as {
-		given_audit_ID: number;
-	};
+	const navigate = useNavigate();
+
+	const { given_audit_ID, given_page_ID, given_page_state_ID } =
+		useLoaderData() as {
+			given_audit_ID: number;
+			given_page_ID: number;
+			given_page_state_ID: number;
+		};
 
 	const audit = useJoinedAudit(given_audit_ID);
 
 	if (!audit) return null;
+
+	const isValid = validateUrl({
+		given_page_ID: given_page_ID,
+		given_page_state_ID: given_page_state_ID,
+		joined_audit: audit,
+	});
+
+	// using useState resulted in endless loops; need to look into it
+	let view = "audit";
+	let id = audit.id;
+
+	if (given_page_state_ID && isValid) {
+		view = "page_state";
+		id = given_page_state_ID;
+	} else if (given_page_ID && isValid) {
+		view = "page";
+		id = given_page_ID;
+	}
 
 	return (
 		<main>
@@ -29,12 +64,18 @@ export default function AuditPage() {
 			<Link to={"/audit/settings?audit_ID=" + audit.id}>
 				{"Audit Settings"}
 			</Link>
-			<PageAndStateNav pages={audit.pages} />
-			<h2>Issues</h2>
-			<IssueTable issues={audit.issues} />
+			<PageAndStateNav
+				pages={audit.pages}
+				navigate={navigate}
+				audit_ID={audit.id}
+			/>
+			<h2>
+				Issues - {view} - {id}
+			</h2>
+			<IssueTable issues={audit.issues} view={view} id={id} />
 		</main>
 	);
-	/* Commenting out for now
+	/* Commenting out until actions exist
 				<section aria-labelledby="actions">
 					<h2 id="actions">Actions</h2>
 					<p>Action Content</p>
@@ -42,20 +83,59 @@ export default function AuditPage() {
 	*/
 }
 
-function PageAndStateNav({ pages }: { pages: JoinedPage[] }) {
+function PageAndStateNav({
+	pages,
+	navigate,
+	audit_ID,
+}: {
+	pages: JoinedPage[];
+	navigate: NavigateFunction;
+	audit_ID: number;
+}) {
 	return (
 		<nav>
 			<h2>Pages</h2>
-			<button>All Pages</button>
+			<button
+				type="button"
+				onClick={() => {
+					navigate("/audit?audit_ID=" + audit_ID);
+				}}
+			>
+				All Pages
+			</button>
 			{pages.map((page) => (
 				<>
 					<h3 key={page.id}>
-						<button>{page.name}</button>
+						<button
+							type="button"
+							onClick={() => {
+								navigate(
+									"/audit?audit_ID=" +
+										audit_ID +
+										"&page_ID=" +
+										page.id
+								);
+							}}
+						>
+							{page.name} (id:{page.id})
+						</button>
 					</h3>
 					<ul>
-						{page.page_states.map((state) => (
-							<li key={state.id}>
-								<button>{state.name}</button>
+						{page.page_states.map((page_state) => (
+							<li key={page_state.id}>
+								<button
+									type="button"
+									onClick={() => {
+										navigate(
+											"/audit?audit_ID=" +
+												audit_ID +
+												"&page_state_ID=" +
+												page_state.id
+										);
+									}}
+								>
+									{page_state.name} (id:{page_state.id})
+								</button>
 							</li>
 						))}
 					</ul>
@@ -65,7 +145,15 @@ function PageAndStateNav({ pages }: { pages: JoinedPage[] }) {
 	);
 }
 
-function IssueTable({ issues }: { issues: IssueContent[] }) {
+function IssueTable({
+	issues,
+	view,
+	id,
+}: {
+	issues: IssueContent[];
+	view: string;
+	id: number;
+}) {
 	return (
 		<table>
 			<thead>
@@ -73,12 +161,13 @@ function IssueTable({ issues }: { issues: IssueContent[] }) {
 					<th id="issue-description">Issue Description</th>
 					<th>Issue Status</th>
 					<th>Check Description</th>
-					<th>Page State Name</th>
-					<th>Page Name</th>
+					{view === "audit" && <th>Page State Name</th>}
+					{view === "page" && <th>Page State Name</th>}
+					{view === "audit" && <th>Page Name</th>}
 				</tr>
 			</thead>
 			<tbody>
-				<IssueRows issue_content_array={issues} />
+				<IssueRows issue_content_array={issues} view={view} id={id} />
 			</tbody>
 		</table>
 	);
@@ -86,9 +175,15 @@ function IssueTable({ issues }: { issues: IssueContent[] }) {
 
 function IssueRows({
 	issue_content_array,
+	view,
+	id,
 }: {
 	issue_content_array: IssueContent[];
+	view: string;
+	id: number;
 }) {
+	// display content if it matches the view/id
+	// i.e. only issues for view="page_state" and id="1" would show issues for page_state with id=1
 	return (
 		<>
 			{issue_content_array.map((issue_content) => (
@@ -104,8 +199,13 @@ function IssueRows({
 						<IssueStatusSelect />
 					</td>
 					<td>{issue_content.check.description}</td>
-					<td>{issue_content.page_state.name}</td>
-					<td>{issue_content.page.name}</td>
+					{view === "audit" && (
+						<td>{issue_content.page_state.name}</td>
+					)}
+					{view === "page" && (
+						<td>{issue_content.page_state.name}</td>
+					)}
+					{view === "audit" && <td>{issue_content.page.name}</td>}
 				</tr>
 			))}
 		</>
@@ -130,4 +230,37 @@ function IssueStatusSelect() {
 			))}
 		</select>
 	);
+}
+
+function validateUrl({
+	given_page_ID,
+	given_page_state_ID,
+	joined_audit,
+}: {
+	given_page_ID: number;
+	given_page_state_ID: number;
+	joined_audit: JoinedAudit;
+}) {
+	let page_in_audit = false;
+	let page_state_in_audit = false;
+
+	for (const page of joined_audit.pages) {
+		if (page.id === given_page_ID) {
+			page_in_audit = true;
+		}
+
+		const page_state_array = page.page_states;
+		for (const page_state of page_state_array) {
+			if (page_state.id === given_page_state_ID) {
+				page_state_in_audit = true;
+			}
+		}
+	}
+
+	if (given_page_state_ID && page_state_in_audit) {
+		return true;
+	} else if (given_page_ID && page_in_audit) {
+		return true;
+	}
+	return false;
 }
