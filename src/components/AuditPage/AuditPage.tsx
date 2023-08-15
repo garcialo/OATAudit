@@ -174,9 +174,6 @@ function IssueRows({
 	view: string;
 	id: number;
 }) {
-	// display content if it matches the view/id
-	// i.e. only issues for view="page_state" and id="1" would show issues for page_state with id=1
-
 	return (
 		<>
 			{issue_content_array.map((issue_content) => {
