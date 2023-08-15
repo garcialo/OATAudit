@@ -145,13 +145,18 @@ function IssueTable({
 	view: string;
 	id: number;
 }) {
+	const label_issue_description_textarea = useId();
+	const label_issue_status_select = useId();
+
 	return (
 		<table>
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th id="issue-description">Issue Description</th>
-					<th>Issue Status</th>
+					<th id={label_issue_description_textarea}>
+						Issue Description
+					</th>
+					<th id={label_issue_status_select}>Issue Status</th>
 					<th>Check Description</th>
 					{view === "audit" && <th>Page State Name</th>}
 					{view === "page" && <th>Page State Name</th>}
@@ -159,7 +164,15 @@ function IssueTable({
 				</tr>
 			</thead>
 			<tbody>
-				<IssueRows issue_content_array={issues} view={view} id={id} />
+				<IssueRows
+					issue_content_array={issues}
+					view={view}
+					id={id}
+					label_issue_description_textarea={
+						label_issue_description_textarea
+					}
+					label_issue_status_select={label_issue_status_select}
+				/>
 			</tbody>
 		</table>
 	);
@@ -169,25 +182,26 @@ function IssueRows({
 	issue_content_array,
 	view,
 	id,
+	label_issue_description_textarea,
+	label_issue_status_select,
 }: {
 	issue_content_array: IssueContent[];
 	view: string;
 	id: number;
+	label_issue_description_textarea: string;
+	label_issue_status_select: string;
 }) {
 	return (
 		<>
 			{issue_content_array.map((issue_content) => {
 				let showIssue = true;
-				console.log("View: " + view + " - ID: " + id);
 				if (
 					view === "page_state" &&
 					issue_content.page_state.id != id
 				) {
 					showIssue = false;
-					console.log("Don't show because page state");
 				} else if (view === "page" && issue_content.page.id != id) {
 					showIssue = false;
-					console.log("Don't show because page state");
 				}
 
 				if (showIssue)
@@ -197,14 +211,18 @@ function IssueRows({
 							<td>
 								<textarea
 									name={"" + issue_content.issue.id}
-									aria-labelledby="issue-description"
+									aria-labelledby={
+										label_issue_description_textarea
+									}
 									defaultValue={
 										issue_content.issue.description
 									}
 								/>
 							</td>
 							<td>
-								<IssueStatusSelect />
+								<IssueStatusSelect
+									label={label_issue_status_select}
+								/>
 							</td>
 							<td>{issue_content.check.description}</td>
 							{view === "audit" && (
@@ -223,7 +241,7 @@ function IssueRows({
 	);
 }
 
-function IssueStatusSelect() {
+function IssueStatusSelect({ label }: { label: string }) {
 	const statuses: { text: string; value: string }[] = [
 		{ text: "Check Incomplete", value: "incomplete" },
 		{ text: "Pass", value: "pass" },
@@ -233,7 +251,7 @@ function IssueStatusSelect() {
 	];
 
 	return (
-		<select>
+		<select aria-labelledby={label}>
 			{statuses.map((status) => (
 				<option key={status.value} value={status.value}>
 					{status.text}
