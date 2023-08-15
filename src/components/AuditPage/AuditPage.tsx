@@ -27,8 +27,6 @@ export async function auditLoader({ request }: LoaderFunctionArgs) {
 export default function AuditPage() {
 	setPageTitle("Audit - OAT Audit");
 
-	const navigate = useNavigate();
-
 	const { given_audit_ID, given_page_ID, given_page_state_ID } =
 		useLoaderData() as {
 			given_audit_ID: number;
