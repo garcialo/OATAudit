@@ -176,30 +176,51 @@ function IssueRows({
 }) {
 	// display content if it matches the view/id
 	// i.e. only issues for view="page_state" and id="1" would show issues for page_state with id=1
+
 	return (
 		<>
-			{issue_content_array.map((issue_content) => (
-				<tr key={issue_content.issue.id}>
-					<td>
-						<textarea
-							name={"" + issue_content.issue.id}
-							aria-labelledby="issue-description"
-							defaultValue={issue_content.issue.description}
-						/>
-					</td>
-					<td>
-						<IssueStatusSelect />
-					</td>
-					<td>{issue_content.check.description}</td>
-					{view === "audit" && (
-						<td>{issue_content.page_state.name}</td>
-					)}
-					{view === "page" && (
-						<td>{issue_content.page_state.name}</td>
-					)}
-					{view === "audit" && <td>{issue_content.page.name}</td>}
-				</tr>
-			))}
+			{issue_content_array.map((issue_content) => {
+				let showIssue = true;
+				console.log("View: " + view + " - ID: " + id);
+				if (
+					view === "page_state" &&
+					issue_content.page_state.id != id
+				) {
+					showIssue = false;
+					console.log("Don't show because page state");
+				} else if (view === "page" && issue_content.page.id != id) {
+					showIssue = false;
+					console.log("Don't show because page state");
+				}
+
+				if (showIssue)
+					return (
+						<tr key={issue_content.issue.id}>
+							<td>
+								<textarea
+									name={"" + issue_content.issue.id}
+									aria-labelledby="issue-description"
+									defaultValue={
+										issue_content.issue.description
+									}
+								/>
+							</td>
+							<td>
+								<IssueStatusSelect />
+							</td>
+							<td>{issue_content.check.description}</td>
+							{view === "audit" && (
+								<td>{issue_content.page_state.name}</td>
+							)}
+							{view === "page" && (
+								<td>{issue_content.page_state.name}</td>
+							)}
+							{view === "audit" && (
+								<td>{issue_content.page.name}</td>
+							)}
+						</tr>
+					);
+			})}
 		</>
 	);
 }
