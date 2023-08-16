@@ -49,21 +49,21 @@ db.on("populate", async () => {
 		{
 			id: 1,
 			check_ID: "oat0001",
-			status: "Pass",
+			status: "pass",
 			page_state_ID: 1,
 			page_ID: 1,
 		},
 		{
 			id: 2,
 			check_ID: "oat0002",
-			status: "Pass",
+			status: "pass",
 			page_state_ID: 1,
 			page_ID: 1,
 		},
 		{
 			id: 3,
 			check_ID: "oat0001",
-			status: "Fail",
+			status: "fail",
 			page_state_ID: 2,
 			page_ID: 1,
 			description: "Picture ()",
@@ -71,7 +71,7 @@ db.on("populate", async () => {
 		{
 			id: 4,
 			check_ID: "oat0002",
-			status: "Fail",
+			status: "fail",
 			page_state_ID: 2,
 			page_ID: 1,
 			description:

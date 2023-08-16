@@ -49,7 +49,7 @@ export default function HomePage() {
 			for (const check_ID of db_checklist?.check_IDs || []) {
 				const issue_ID = await db.issues.add({
 					check_ID: check_ID,
-					status: "Check Incomplete",
+					status: "incomplete",
 					page_state_ID: page_state_ID_number,
 					page_ID: page_ID_number,
 				});
