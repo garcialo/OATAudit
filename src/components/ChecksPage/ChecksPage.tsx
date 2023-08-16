@@ -55,6 +55,8 @@ function ChecklistChecks({ checklist_ID }: { checklist_ID: number }) {
 
 	if (!checklist) return null;
 
+	setPageTitle(checklist.name + " Checks - OAT Audit");
+
 	return (
 		<>
 			<CheckRows check_IDs={checklist.check_IDs} />

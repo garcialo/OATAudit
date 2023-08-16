@@ -33,6 +33,8 @@ export default function AuditPage() {
 
 	if (!audit) return null;
 
+	setPageTitle(audit.name + " - OAT Audit");
+
 	const paramsAreValid = validateUrlParams({
 		given_page_ID: given_page_ID,
 		given_page_state_ID: given_page_state_ID,
@@ -58,9 +60,7 @@ export default function AuditPage() {
 				{"Audit Settings"}
 			</Link>
 			<PageAndStateNav pages={audit.pages} audit_ID={audit.id} />
-			<h2>
-				Issues - {view} - {id}
-			</h2>
+			<h2>Issues</h2>
 			<IssueTable issues={audit.issues} view={view} id={id} />
 		</main>
 	);
