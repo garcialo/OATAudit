@@ -3,8 +3,10 @@ import {
 	isRouteErrorResponse,
 	useRouteError,
 } from "react-router-dom";
+import setPageTitle from "../setPageTitle";
 
 const Error = () => {
+	setPageTitle("Error Found - OAT Audit");
 	const navigate = useNavigate();
 	const error = useRouteError() as Error;
 
@@ -14,9 +16,17 @@ const Error = () => {
 
 	return (
 		<>
-			<h1>Something went wrong 😢</h1>
+			<h1>Error found</h1>
+			<p>
+				Lost in the code's flow
+				<br />
+				Mistakes teach us as we grow
+				<br />
+				"404" found, yo
+			</p>
+			<h2>Error content</h2>
 			<p>{error.data}</p>
-			<button onClick={() => navigate(-1)}>&larr; Go back</button>
+			<button onClick={() => navigate(-1)}>Back</button>
 		</>
 	);
 };
