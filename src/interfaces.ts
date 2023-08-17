@@ -77,7 +77,7 @@ export interface Rule {
 	description: string;
 	accessibility_requirements_IDs: number[];
 }
-
+/*
 interface AccessibilityRequirement {
 	rule_ID: number;
 	id: number;
@@ -90,3 +90,4 @@ interface AccessibilityRequirement {
 	passed?: string;
 	inapplicable?: string;
 }
+*/
