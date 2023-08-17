@@ -38,7 +38,8 @@ export default function PageAndStateNav({
 							type="button"
 							onClick={() => handlePage(page.id)}
 						>
-							{page.name} (id:{page.id})
+							{page.name}{" "}
+							{import.meta.env.DEV && " (id:" + page.id + ")"}
 						</button>
 					</h3>
 					<ul>
@@ -50,7 +51,9 @@ export default function PageAndStateNav({
 										handlePageState(Number(page_state.id))
 									}
 								>
-									{page_state.name} (id:{page_state.id})
+									{page_state.name}{" "}
+									{import.meta.env.DEV &&
+										" (id:" + page_state.id + ")"}
 								</button>
 							</li>
 						))}

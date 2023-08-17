@@ -73,7 +73,7 @@ export default function HomePage() {
 
 	return (
 		<main>
-			<h1>OAT Audit</h1>
+			<h1>OAT Audit {import.meta.env.DEV && <span>Dev Mode</span>}</h1>
 			<h2>Continue an audit</h2>
 			<ul>
 				<AuditList />

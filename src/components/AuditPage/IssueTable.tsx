@@ -18,7 +18,7 @@ export default function IssueTable({
 		<table>
 			<thead>
 				<tr>
-					<th>ID</th>
+					{import.meta.env.DEV && <th>ID</th>}
 					<th id={label_issue_description_textarea}>
 						Issue Description
 					</th>
@@ -89,7 +89,9 @@ function IssueRows({
 				if (showIssue)
 					return (
 						<tr key={issue_content.issue.id}>
-							<td>{issue_content.issue.id}</td>
+							{import.meta.env.DEV && (
+								<td>{issue_content.issue.id}</td>
+							)}
 							<td>
 								<textarea
 									name={"" + issue_content.issue.id}

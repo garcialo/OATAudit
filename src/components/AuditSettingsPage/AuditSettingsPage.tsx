@@ -252,7 +252,8 @@ function PageSettings({ page }: { page: JoinedPage }) {
 			<Form onSubmit={handleUpdatePage}>
 				<fieldset>
 					<legend>
-						Page: {page.name} (id:{page.id})
+						Page: {page.name}{" "}
+						{import.meta.env.DEV && " (id:" + page.id + ")"}
 					</legend>
 					<label htmlFor={label_update_page_name}>
 						Page Name: {original_name != name ? <Updated /> : null}
@@ -354,7 +355,8 @@ function PageStateSettings({ page_state }: { page_state: Page_state }) {
 		<Form onSubmit={handleUpdatePageState}>
 			<fieldset>
 				<legend>
-					Page State: {page_state.name} (id={page_state.id})
+					Page State: {page_state.name}
+					{import.meta.env.DEV && " (id=" + page_state.id + ")"}
 				</legend>
 				<label htmlFor={label_update_page_state_name}>
 					Page State Name:{" "}
