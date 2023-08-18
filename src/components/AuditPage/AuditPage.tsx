@@ -56,7 +56,7 @@ export default function AuditPage() {
 	return (
 		<main>
 			<h1>{audit.name}</h1>
-			<Link to={"/audit/settings?audit_ID=" + audit.id}>
+			<Link to={"/OATAudit/audit/settings?audit_ID=" + audit.id}>
 				{"Audit Settings"}
 			</Link>
 			<PageAndStateNav pages={audit.pages} audit_ID={audit.id} />

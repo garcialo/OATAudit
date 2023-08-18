@@ -114,7 +114,7 @@ export default function AuditSettingsPage() {
 		<main>
 			<h1>
 				Audit Settings:{" "}
-				<Link to={"/audit?audit_ID=" + current_audit.id}>
+				<Link to={"/OATAudit/audit?audit_ID=" + current_audit.id}>
 					{current_audit.name}
 				</Link>
 			</h1>

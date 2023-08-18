@@ -10,11 +10,13 @@ export default function AuditList() {
 			<>
 				{audits?.map((audit) => (
 					<li key={audit.id}>
-						<Link to={"audit?audit_ID=" + audit.id}>
+						<Link to={"/OATAudit/audit?audit_ID=" + audit.id}>
 							{audit.name}
 						</Link>
 						{" - "}
-						<Link to={"audit/settings?audit_ID=" + audit.id}>
+						<Link
+							to={"/OATAudit/audit/settings?audit_ID=" + audit.id}
+						>
 							{"Settings - " + audit.name}
 						</Link>
 					</li>

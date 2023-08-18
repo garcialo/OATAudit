@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 export default function Header() {
 	return (
 		<header>
-			<Link to={"/"}>Home</Link>
+			<Link to={"/OATAudit/"}>Home</Link>
 			<ul>
 				<li>
-					<Link to={"/checks"}>Checks</Link>
+					<Link to={"/OATAudit/checks"}>Checks</Link>
 				</li>
 				<li>
 					<a href="https://github.com/garcialo/OATAudit">

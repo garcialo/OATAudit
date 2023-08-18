@@ -30,21 +30,21 @@ const router = createBrowserRouter([
 		errorElement: <ErrorPage />,
 		children: [
 			{
-				path: "/",
+				path: "/OATAudit/",
 				element: <HomePage />,
 			},
 			{
-				path: "/checks",
+				path: "/OATAudit/checks",
 				loader: checksLoader,
 				element: <ChecksPage />,
 			},
 			{
-				path: "/audit",
+				path: "/OATAudit/audit",
 				loader: auditLoader,
 				element: <AuditPage />,
 			},
 			{
-				path: "/audit/settings",
+				path: "/OATAudit/audit/settings",
 				loader: auditSettingsLoader,
 				element: <AuditSettingsPage />,
 			},
