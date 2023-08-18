@@ -23,7 +23,7 @@ export default function ChecksPage() {
 		<main>
 			<h1>Checks</h1>
 			<FormSelectChecklist
-				actionValue="/checks"
+				actionValue="/OATAudit/checks"
 				submitButtonText="Select Checklist"
 			/>
 

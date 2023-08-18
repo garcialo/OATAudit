@@ -63,7 +63,7 @@ export default function HomePage() {
 				issue_IDs: issue_IDs,
 			});
 			const audit_ID_number = Number(audit_ID);
-			const url = "/audit?audit_ID=" + audit_ID_number;
+			const url = "/OATAudit/audit?audit_ID=" + audit_ID_number;
 			console.log("Nav attempt: " + url);
 			navigate(url);
 		} catch (error) {
