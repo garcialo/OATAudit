@@ -79,7 +79,7 @@ export default function HomePage() {
 				<AuditList />
 			</ul>
 
-			<h2>Test New Audit</h2>
+			<h2>Create a new audit</h2>
 			<Form>
 				<label htmlFor={selectID}>Choose a checklist</label>
 				<select
