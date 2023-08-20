@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import "./index.css";
 
 import Header from "./components/Header.tsx";
+import Quine from "./components/Quine/Quine.tsx";
 import ErrorPage from "./components/ErrorPage.tsx";
 import HomePage from "./components/HomePage/HomePage.tsx";
 import ChecksPage, {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
 				path: "/OATAudit/audit/settings",
 				loader: auditSettingsLoader,
 				element: <AuditSettingsPage />,
+			},
+			{
+				path: "/OATAudit/quine",
+				element: <Quine />,
 			},
 		],
 	},
